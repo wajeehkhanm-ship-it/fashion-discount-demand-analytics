@@ -1,0 +1,16 @@
+{
+  "dataset": "myntra",
+  "mode": "full",
+  "dev_sample_fraction": null,
+  "seed": 42,
+  "source_file": "myntra202305041052.csv",
+  "raw_rows": 1060213,
+  "dropped_missing_id_or_name": 0,
+  "dropped_duplicate_id": 0,
+  "dropped_invalid_price": 0,
+  "dropped_invalid_mrp": 0,
+  "clipped_discount_rows": 656,
+  "final_rows": 1060213,
+  "n_sellers": 5496,
+  "seconds": 2.5
+}

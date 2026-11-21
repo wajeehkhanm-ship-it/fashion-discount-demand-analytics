@@ -33,7 +33,7 @@ from typing import Any
 
 import duckdb
 
-from fdda.config import load_settings, resolve_path
+from fdda.config import data_mode, load_settings, resolve_path
 from fdda.log import get_logger
 
 log = get_logger(__name__)
@@ -382,7 +382,7 @@ def main(argv: list[str] | None = None) -> None:
     args = parser.parse_args(argv)
 
     settings = load_settings()
-    dev_mode = settings["dev_mode"] if args.dev_mode is None else args.dev_mode
+    dev_mode = (data_mode(settings) == "dev") if args.dev_mode is None else args.dev_mode
     mode_name = "dev" if dev_mode else "full"
     raw = resolve_path(settings, "raw")
     interim = resolve_path(settings, "interim") / mode_name

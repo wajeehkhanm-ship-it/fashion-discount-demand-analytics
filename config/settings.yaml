@@ -68,11 +68,29 @@ eda:
 # --- Used from Phase 3 onwards ---------------------------------------------
 pricing:
   reference_price_quantile: 0.95
-  reference_window_weeks: 8
+  reference_window_weeks: 8        # trailing window, current week included
+  reference_min_obs: 5             # fewer non-outlier sales in window -> lifetime max
   discount_bands:
     edges: [0.0, 0.05, 0.15, 0.25, 0.35, 0.45, 0.55, 0.90]
     labels: ["0-5%", "5-15%", "15-25%", "25-35%", "35-45%", "45-55%", "55%+"]
-  margin_scenarios: [0.50, 0.60, 0.70]
+  margin_scenarios: [0.50, 0.60, 0.70]   # gross margin at full price (no cost data)
+  central_margin: 0.60                   # headline scenario; others shown as a range
+
+discount_analysis:
+  category_level: product_group_name
+  min_articles_per_category: 300   # categories smaller than this are only in "All"
+  min_articles_per_band: 30        # band cells with fewer articles are left blank
+  # Baseline for band indexes. "local": the same article's full-price weeks within
+  # +/- baseline_window_weeks (controls for lifecycle decay: markdowns come late in an
+  # article's life). "lifetime": all full-price weeks of the article (PROJECT_PLAN 4.3
+  # as written; reported as a sensitivity check).
+  headline_baseline: local
+  baseline_window_weeks: 8
+  # Article-age buckets (weeks since first sale) used as an extra fixed effect in the
+  # elasticity regression, so lifecycle decay is not read as a price effect.
+  age_bucket_edges: [0, 4, 8, 13, 26, 52]
+  fe_tolerance: 1.0e-8             # convergence of the two-way fixed-effects demeaning
+  fe_max_iter: 500
 
 customers:
   snapshot_date: null            # null = last transaction date + 1 day

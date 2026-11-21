@@ -43,5 +43,10 @@ def resolve_path(settings: dict[str, Any], key: str) -> Path:
 
 
 def data_mode(settings: dict[str, Any]) -> str:
-    """'dev' when dev_mode is on, else 'full'. Used to keep the two outputs apart."""
+    """'dev' or 'full'. `$FDDA_MODE` overrides `dev_mode` (e.g. `FDDA_MODE=full make analysis`)."""
+    env = os.getenv("FDDA_MODE", "").strip().lower()
+    if env in {"dev", "full"}:
+        return env
+    if env:
+        raise ValueError(f"FDDA_MODE must be 'dev' or 'full', got {env!r}")
     return "dev" if settings.get("dev_mode", True) else "full"

@@ -3,7 +3,7 @@ PYTHON ?= $(shell command -v python3.11 2>/dev/null || echo /opt/homebrew/bin/py
 VENV   := .venv
 PY     := $(VENV)/bin/python
 
-.PHONY: help setup data download clean-data eda analysis forecast tag export all test lint format
+.PHONY: help setup data download clean-data eda discount payback-notebook analysis forecast tag export all test lint format
 
 help:
 	@echo "setup      create .venv, install deps, install pre-commit hooks"
@@ -11,7 +11,9 @@ help:
 	@echo "download   only download raw data"
 	@echo "clean-data only clean raw data -> data/interim/<dev|full>/"
 	@echo "eda        run notebooks/01_eda.ipynb end to end (figures -> reports/figures/)"
-	@echo "analysis | forecast | tag | export   (later phases)"
+	@echo "discount   discount payback tables -> reports/discount/ (FDDA_MODE=full for final numbers)"
+	@echo "analysis   eda + discount + payback notebook"
+	@echo "forecast | tag | export   (later phases)"
 	@echo "all        everything, in order"
 	@echo "test | lint | format"
 
@@ -32,8 +34,14 @@ clean-data:
 eda:
 	$(PY) -m jupyter nbconvert --to notebook --execute --inplace notebooks/01_eda.ipynb
 
-analysis: eda
-	@echo "analysis: discount/KPI/RFM steps not built yet (Phases 3-4)"; exit 1
+discount:
+	$(PY) -m fdda.analysis.discount
+
+payback-notebook:
+	$(PY) -m jupyter nbconvert --to notebook --execute --inplace notebooks/02_discount_payback.ipynb
+
+analysis: eda discount payback-notebook
+	@echo "analysis: KPI/RFM steps not built yet (Phase 4)"
 
 forecast:
 	@echo "forecast: not built yet (Phase 5)"; exit 1

@@ -166,6 +166,135 @@ def vbar(
         ax.legend(loc="upper right")
 
 
+DIVERGING_LOW = "#d03b3b"  # below reference (loss)
+DIVERGING_MID = "#f0efec"  # neutral gray at the reference value
+DIVERGING_HIGH = "#1c5cab"  # above reference (gain)
+
+
+def index_lines(
+    ax: Axes,
+    categories: Sequence[str],
+    series: dict[str, Sequence[float]],
+    *,
+    ref: float = 1.0,
+    label_last: bool = True,
+) -> None:
+    """Lines with markers over ordered categories, a reference line, and end labels."""
+    x = np.arange(len(categories))
+    ax.axhline(ref, color=TEXT_MUTED, linewidth=1, linestyle="--", zorder=1)
+    for i, (name, values) in enumerate(series.items()):
+        vals = np.asarray(values, dtype=float)
+        ax.plot(
+            x,
+            vals,
+            color=SERIES[i],
+            marker="o",
+            markersize=6,
+            label=name,
+            zorder=3,
+            markeredgecolor=SURFACE,
+            markeredgewidth=1.5,
+        )
+        if label_last:
+            last = np.flatnonzero(~np.isnan(vals))
+            if len(last):
+                j = last[-1]
+                ax.annotate(
+                    f"{vals[j]:.2f}",
+                    (x[j], vals[j]),
+                    xytext=(8, 0),
+                    textcoords="offset points",
+                    va="center",
+                    fontsize=8,
+                    color=TEXT_SECONDARY,
+                )
+    ax.set_xticks(x, categories)
+    ax.grid(axis="x", visible=False)
+    if len(series) > 1:
+        ax.legend(loc="best")
+
+
+def diverging_heatmap(
+    ax: Axes,
+    data: np.ndarray,
+    row_labels: Sequence[str],
+    col_labels: Sequence[str],
+    *,
+    center: float = 1.0,
+    fmt: str = "{:.2f}",
+    marks: Sequence[tuple[int, int]] = (),
+) -> None:
+    """Heatmap around `center` (red below, gray at, blue above) with cell values.
+
+    `marks` are (row, col) cells outlined to highlight them (e.g. the payback ceiling).
+    Missing values are left blank.
+    """
+    from matplotlib.colors import LinearSegmentedColormap, TwoSlopeNorm
+
+    cmap = LinearSegmentedColormap.from_list("div", [DIVERGING_LOW, DIVERGING_MID, DIVERGING_HIGH])
+    finite = data[np.isfinite(data)]
+    span = max(abs(finite.max() - center), abs(center - finite.min()), 1e-6)
+    norm = TwoSlopeNorm(vcenter=center, vmin=center - span, vmax=center + span)
+    ax.imshow(np.ma.masked_invalid(data), cmap=cmap, norm=norm, aspect="auto")
+    for (r, c), v in np.ndenumerate(data):
+        if np.isfinite(v):
+            dark = abs(norm(v) - 0.5) > 0.32
+            ax.text(
+                c,
+                r,
+                fmt.format(v),
+                ha="center",
+                va="center",
+                fontsize=8,
+                color=SURFACE if dark else TEXT,
+            )
+    for r, c in marks:
+        ax.add_patch(
+            mpl.patches.Rectangle((c - 0.5, r - 0.5), 1, 1, fill=False, edgecolor=TEXT, linewidth=2)
+        )
+    ax.set_xticks(range(len(col_labels)), col_labels)
+    ax.set_yticks(range(len(row_labels)), row_labels)
+    ax.grid(False)
+    for spine in ax.spines.values():
+        spine.set_visible(False)
+
+
+def forest(
+    ax: Axes,
+    labels: Sequence[str],
+    series: dict[str, tuple[Sequence[float], Sequence[float], Sequence[float]]],
+    *,
+    ref: float = 0.0,
+) -> None:
+    """Point estimates with confidence intervals; `series` maps name -> (est, low, high)."""
+    y = np.arange(len(labels))
+    n = len(series)
+    step = 0.28 if n > 1 else 0
+    ax.axvline(ref, color=TEXT_MUTED, linewidth=1, linestyle="--")
+    for i, (name, (est, lo, hi)) in enumerate(series.items()):
+        off = (i - (n - 1) / 2) * step
+        est, lo, hi = (np.asarray(a, dtype=float) for a in (est, lo, hi))
+        ax.errorbar(
+            est,
+            y + off,
+            xerr=[est - lo, hi - est],
+            fmt="o",
+            color=SERIES[i],
+            ecolor=SERIES[i],
+            elinewidth=2,
+            capsize=0,
+            markersize=6,
+            label=name,
+            markeredgecolor=SURFACE,
+            markeredgewidth=1.2,
+        )
+    ax.set_yticks(y, labels)
+    ax.invert_yaxis()
+    ax.grid(axis="y", visible=False)
+    if n > 1:
+        ax.legend(loc="lower left")
+
+
 def save_fig(fig: Figure, name: str, out_dir: Path) -> Path:
     """Save a figure as PNG under `out_dir` and return the path."""
     out_dir = Path(out_dir)
