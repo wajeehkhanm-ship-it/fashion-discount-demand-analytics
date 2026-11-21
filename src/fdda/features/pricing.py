@@ -46,6 +46,35 @@ def week_index_sql(date_col: str) -> str:
     return f"(epoch(date_trunc('week', {date_col})) // 604800)::INTEGER"
 
 
+def build_transaction_discounts(
+    con: duckdb.DuckDBPyConnection,
+    tx: str,
+    article_weeks_path: Path,
+    out_path: Path,
+    max_discount: float,
+) -> int:
+    """Write transactions with a per-unit `discount` vs their article-week reference price.
+
+    Keeps only the columns later phases need (KPIs, RFM, Power BI export). Returns the row
+    count. Requires the article x week table from `build_article_weeks`.
+    """
+    out_path = Path(out_path)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    con.execute(f"""
+        COPY (
+            SELECT t.t_dat, t.customer_id, t.article_id, t.product_code, t.product_group_name,
+                   t.product_type_name, t.sales_channel_id, t.indexed_price,
+                   least(greatest(1 - t.indexed_price / a.indexed_ref_price, 0),
+                         {float(max_discount)}) AS discount
+            FROM {tx} t
+            JOIN read_parquet({_q(article_weeks_path)}) a
+              ON t.article_id = a.article_id
+             AND date_trunc('week', t.t_dat)::DATE = a.week
+        ) TO {_q(out_path)} (FORMAT parquet)
+    """)
+    return con.execute(f"SELECT count(*) FROM read_parquet({_q(out_path)})").fetchone()[0]
+
+
 def build_article_weeks(
     con: duckdb.DuckDBPyConnection,
     tx: str,

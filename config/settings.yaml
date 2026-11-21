@@ -94,9 +94,47 @@ discount_analysis:
 
 customers:
   snapshot_date: null            # null = last transaction date + 1 day
-  churn_window_days: 120
+  churn_window_days: 120         # churned = no purchase in the last N days
   churn_sensitivity_days: [90, 120, 180]
-  # RFM segment mapping table is added in Phase 4.
+  # H&M has no order id: an "order" is one customer's purchases on one day in one channel.
+  top_n: 20                      # top articles / styles in the KPI tables
+  discounted_threshold: 0.05     # a unit counts as "sold at a discount" at >= 5% off
+  # RFM segments on recency (R) and frequency (F) scores 1-5; first match wins.
+  # The grid covers all 25 R x F cells. Monetary (M) is reported per segment.
+  rfm_segments:
+    - {segment: "Champions",           r: [5, 5], f: [4, 5]}
+    - {segment: "Loyal",               r: [3, 4], f: [4, 5]}
+    - {segment: "Potential Loyalists", r: [4, 5], f: [2, 3]}
+    - {segment: "New",                 r: [4, 5], f: [1, 1]}
+    - {segment: "Need Attention",      r: [3, 3], f: [1, 3]}
+    - {segment: "Can't Lose",          r: [1, 2], f: [5, 5]}
+    - {segment: "At Risk",             r: [1, 2], f: [3, 4]}
+    - {segment: "Hibernating",         r: [2, 2], f: [1, 2]}
+    - {segment: "Lost",                r: [1, 1], f: [1, 2]}
+  # Win-back playbook: segments covered, in priority order, with the actions that are
+  # judgement calls (channel, timing, KPI). Sizes, revenue, categories, discount
+  # behaviour and the capped offer are computed from data.
+  winback:
+    - segment: "Can't Lose"
+      action: "Personal re-engagement: early access to the new season plus a capped offer"
+      channel: "Email + app push, personalised by favourite category"
+      timing: "Now, then 2-3 weeks before each seasonal peak"
+      kpi: "Reactivation within 60 days vs a 10% holdout; incremental revenue per contact"
+    - segment: "At Risk"
+      action: "3-touch email series: new arrivals in favourite categories, then the offer"
+      channel: "Email (online-heavy segment), store receipt message for in-store buyers"
+      timing: "When recency passes 90 days; series over 3 weeks"
+      kpi: "Second purchase within 45 days vs holdout"
+    - segment: "Hibernating"
+      action: "Low-cost content-led nudge; offer only on the last touch"
+      channel: "Newsletter / owned channels only (no paid media)"
+      timing: "At season launches"
+      kpi: "Reactivation rate and offer cost per reactivated customer"
+    - segment: "Lost"
+      action: "One final reactivation message, then sunset from campaigns"
+      channel: "Single email; suppress from paid retargeting"
+      timing: "Once, at the next major sale event"
+      kpi: "Reactivation rate; list hygiene (unsubscribes, bounces)"
 
 forecast:
   top_n_categories: 8

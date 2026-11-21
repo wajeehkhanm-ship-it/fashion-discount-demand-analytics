@@ -295,6 +295,77 @@ def forest(
         ax.legend(loc="lower left")
 
 
+SEQUENTIAL_BLUE = ["#cde2fb", "#9ec5f4", "#6da7ec", "#3987e5", "#256abf", "#184f95", "#0d366b"]
+
+
+def sequential_heatmap(
+    ax: Axes,
+    data: np.ndarray,
+    row_labels: Sequence[str],
+    col_labels: Sequence[str],
+    *,
+    fmt: str = "{:.0%}",
+    annotate: bool = True,
+) -> None:
+    """One-hue (blue) heatmap for magnitudes such as retention; missing cells are blank."""
+    from matplotlib.colors import LinearSegmentedColormap
+
+    cmap = LinearSegmentedColormap.from_list("seq", SEQUENTIAL_BLUE)
+    finite = data[np.isfinite(data)]
+    vmin, vmax = float(finite.min()), float(finite.max())
+    ax.imshow(np.ma.masked_invalid(data), cmap=cmap, vmin=vmin, vmax=vmax, aspect="auto")
+    if annotate:
+        for (r, c), v in np.ndenumerate(data):
+            if np.isfinite(v):
+                dark = (v - vmin) / max(vmax - vmin, 1e-9) > 0.55
+                ax.text(
+                    c,
+                    r,
+                    fmt.format(v),
+                    ha="center",
+                    va="center",
+                    fontsize=7,
+                    color=SURFACE if dark else TEXT,
+                )
+    ax.set_xticks(range(len(col_labels)), col_labels)
+    ax.set_yticks(range(len(row_labels)), row_labels)
+    ax.grid(False)
+    for spine in ax.spines.values():
+        spine.set_visible(False)
+
+
+def stacked_bars(
+    ax: Axes,
+    categories: Sequence[str],
+    series: dict[str, Sequence[float]],
+    *,
+    other_label: str = "Other",
+) -> None:
+    """Vertical stacked bars; series in fixed colour order, `other_label` in neutral gray."""
+    x = np.arange(len(categories))
+    bottom = np.zeros(len(categories))
+    i = 0
+    for name, values in series.items():
+        vals = np.asarray(values, dtype=float)
+        color = OTHER_GRAY if name == other_label else SERIES[i]
+        if name != other_label:
+            i += 1
+        ax.bar(
+            x,
+            vals,
+            bottom=bottom,
+            width=0.8,
+            color=color,
+            label=name,
+            edgecolor=SURFACE,
+            linewidth=0.8,
+        )
+        bottom += vals
+    ax.set_xticks(x, categories)
+    ax.grid(axis="x", visible=False)
+    ax.legend(loc="upper left", bbox_to_anchor=(1.0, 1.0))
+
+
 def save_fig(fig: Figure, name: str, out_dir: Path) -> Path:
     """Save a figure as PNG under `out_dir` and return the path."""
     out_dir = Path(out_dir)

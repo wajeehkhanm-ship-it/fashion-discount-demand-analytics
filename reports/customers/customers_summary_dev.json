@@ -1,0 +1,32 @@
+{
+  "mode": "dev",
+  "transactions": 3157777,
+  "snapshot_date": "2020-09-23",
+  "customers": 135989,
+  "unassigned": 0,
+  "churn_window": 120,
+  "ceiling": {
+    "category": "All",
+    "measure": "margin_index_60",
+    "reference": "from 5-15%",
+    "ceiling_band": "5-15%",
+    "ceiling_discount": 0.10000000000000009,
+    "ceiling_index": 0.8152700973717271,
+    "turns_negative": true,
+    "first_negative_band": "15-25%",
+    "marginal_at_turn": -0.01468367542868395,
+    "peak_band": "5-15%",
+    "peak_index": 0.8152700973717271,
+    "baseline": "local"
+  },
+  "offer_cap": 0.1,
+  "totals": {
+    "indexed_revenue": 88034980.06775357,
+    "orders": 914179,
+    "units": 3157777,
+    "customers": 135989,
+    "aov": 96.29949940630179,
+    "units_per_order": 3.454221766196773,
+    "discounted_revenue_share": 0.3231583168549338
+  }
+}

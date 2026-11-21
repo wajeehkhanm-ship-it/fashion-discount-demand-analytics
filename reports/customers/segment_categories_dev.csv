@@ -1,0 +1,28 @@
+segment,category,units,unit_share,rank
+At Risk,Garment Upper body,83790,0.4075091797777399,1
+At Risk,Garment Lower body,45922,0.2233397368869003,2
+At Risk,Garment Full body,20067,0.097595019818593,3
+Can't Lose,Garment Upper body,22489,0.4184467103304555,1
+Can't Lose,Garment Lower body,11760,0.2188151235486752,2
+Can't Lose,Garment Full body,5734,0.10669097945817207,3
+Champions,Garment Upper body,538142,0.39840472866024745,1
+Champions,Garment Lower body,298364,0.22088896325130927,2
+Champions,Garment Full body,161474,0.11954466508037805,3
+Hibernating,Garment Upper body,29384,0.4007583093520274,1
+Hibernating,Garment Lower body,15401,0.21004896278010393,2
+Hibernating,Garment Full body,7637,0.10415842664448112,3
+Lost,Garment Upper body,44459,0.43280894063589104,1
+Lost,Garment Lower body,22988,0.22378847763867526,2
+Lost,Garment Full body,8658,0.08428574210003699,3
+Loyal,Garment Upper body,434064,0.3896480219750626,1
+Loyal,Garment Lower body,246469,0.22124884424456234,2
+Loyal,Garment Full body,121835,0.10936812718247022,3
+Need Attention,Garment Upper body,44345,0.3574710605230065,1
+Need Attention,Garment Lower body,27577,0.22230193789701094,2
+Need Attention,Swimwear,15377,0.12395608293296359,3
+New,Garment Upper body,7811,0.37987549849236457,1
+New,Garment Lower body,4658,0.226534383814804,2
+New,Garment Full body,2268,0.11030055442077619,3
+Potential Loyalists,Garment Upper body,41271,0.3651363809287882,1
+Potential Loyalists,Garment Lower body,25211,0.22304895203885727,2
+Potential Loyalists,Swimwear,12357,0.10932592520503588,3
