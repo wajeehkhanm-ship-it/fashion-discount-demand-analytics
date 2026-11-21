@@ -33,7 +33,7 @@ DATATABLE (
     }
 )
 
-// One row per category used in the Phase 3 tables (includes "All"); relate it to
+// One row per category used in the discount tables (includes "All"); relate it to
 // fact_discount_bands[category] and fact_discount_thresholds[category] (1 to many).
 dim_discount_category =
 DISTINCT ( fact_discount_bands[category] )
@@ -205,7 +205,7 @@ Full Price Reference =
 1
 
 // The markdown ceiling for the selected category, margin and baseline: the deepest band
-// before extra discount starts to cut margin, among discount levels (Phase 3).
+// before extra discount starts to cut margin, among discount levels.
 Ceiling Band =
 VAR m = SELECTEDVALUE ( 'Margin Scenario'[margin], 0.6 )
 VAR measureName = "margin_index_" & FORMAT ( m * 100, "0" )
@@ -286,7 +286,7 @@ AVERAGE ( fact_customer[recency_days] )
 Avg Purchase Days =
 AVERAGE ( fact_customer[frequency] )
 
-// Win-back offer for a single segment (capped at the Phase 3 markdown ceiling).
+// Win-back offer for a single segment (capped at the markdown ceiling).
 Win-back Offer =
 SELECTEDVALUE ( dim_customer_segment[offer_discount] )
 

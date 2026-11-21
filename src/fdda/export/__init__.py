@@ -1,1 +1,1 @@
-"""Implemented in a later phase (see PROJECT_PLAN.md)."""
+"""Exports for Power BI (star schema and data dictionary)."""

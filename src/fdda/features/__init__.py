@@ -1,1 +1,1 @@
-"""Implemented in a later phase (see PROJECT_PLAN.md)."""
+"""Feature building: reference price, discount bands and RFM."""

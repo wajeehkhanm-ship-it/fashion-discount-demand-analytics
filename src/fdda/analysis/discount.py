@@ -1,4 +1,4 @@
-"""Discount payback analysis (PROJECT_PLAN 4.3).
+"""Discount payback analysis.
 
 Inputs: the article x week table from `fdda.features.pricing.build_article_weeks`.
 
@@ -153,9 +153,9 @@ def payback_threshold(
     econ: pd.DataFrame, value_col: str, start_band: str | None = None
 ) -> pd.DataFrame:
     """Per category: the ceiling band, i.e. the last band before the marginal index change
-    per extra discount point turns negative (PROJECT_PLAN 4.3 step 4).
+    per extra discount point turns negative.
 
-    With `start_band=None` the walk starts at full price (the plan's definition: does a
+    With `start_band=None` the walk starts at full price (the standard question: does a
     discount beat full price?). With `start_band` set (e.g. the shallowest discount band)
     the walk starts there instead, answering: once an article is marked down, beyond which
     depth do deeper markdowns stop paying back? `econ` must be sorted by band within
@@ -441,7 +441,7 @@ def build_summary(
 
 
 def run(settings: dict[str, Any], mode: str) -> dict[str, Any]:
-    """Compute every Phase 3 output for `mode` and write CSV/JSON to reports/discount/."""
+    """Compute every discount-analysis output for `mode` and write CSV/JSON to reports/discount/."""
     p, da = settings["pricing"], settings["discount_analysis"]
     edges, labels = p["discount_bands"]["edges"], p["discount_bands"]["labels"]
     margins, central = p["margin_scenarios"], p["central_margin"]
@@ -544,7 +544,7 @@ def run(settings: dict[str, Any], mode: str) -> dict[str, Any]:
 
 
 def write_memo(settings: dict[str, Any], mode: str) -> Path:
-    """Render the pricing memo from the saved Phase 3 outputs.
+    """Render the pricing memo from the saved discount-analysis outputs.
 
     Full data -> reports/pricing_recommendation.md; dev -> reports/discount/..._dev.md.
     """

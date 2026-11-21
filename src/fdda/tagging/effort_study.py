@@ -1,4 +1,4 @@
-"""Timed effort study (PROJECT_PLAN 4.7): manual tagging vs reviewing model suggestions.
+"""Timed effort study: manual tagging vs reviewing model suggestions.
 
 Run in a terminal, after `python -m fdda.tagging.run study-prep`:
 

@@ -1,4 +1,4 @@
-"""Rolling-origin backtest and forward forecast (PROJECT_PLAN 4.6).
+"""Rolling-origin backtest and forward forecast.
 
 Models:
 * seasonal_naive: the same week last year (y at t - 52 weeks).
@@ -211,7 +211,7 @@ def run(settings: dict[str, Any], mode: str) -> dict[str, Any]:
     processed = resolve_path(settings, "processed") / mode
     txd_path = processed / "transactions_discount.parquet"
     if not txd_path.exists():
-        raise FileNotFoundError(f"{txd_path} missing; run `make customers` (Phase 4) first.")
+        raise FileNotFoundError(f"{txd_path} missing; run `make customers` first.")
     out = resolve_path(settings, "reports") / "forecast"
     out.mkdir(parents=True, exist_ok=True)
     con = connect(settings)

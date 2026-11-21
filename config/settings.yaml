@@ -50,7 +50,7 @@ eda:
   sample_rows: 200000            # rows sampled for distribution plots
   top_n_groups: 8                # categories beyond this fold into "Other"
   # Myntra has no category column. Rough keyword rules on the product name,
-  # first match wins (whole-word, case-insensitive). Phase 6 replaces this with LLM tags.
+  # first match wins (whole-word, case-insensitive). Notebook 05's ML tagger improves on this.
   myntra_category_rules:
     - {category: "Innerwear & nightwear", keywords: [bra, bras, briefs, boxers, trunks, panties, lingerie, night, nightdress, nightsuit, pyjamas, lounge, camisole, thermal, shapewear, innerwear, vest, vests, tights]}
     - {category: "Ethnic wear", keywords: [kurta, kurtas, kurti, kurtis, saree, sarees, lehenga, dupatta, salwar, sherwani, ethnic, anarkali, churidar, suit]}
@@ -65,7 +65,7 @@ eda:
     - {category: "Home", keywords: [pillow, bedsheet, bedsheets, cushion, curtain, curtains, towel, towels, blanket, quilt, comforter, dohar, mat, rug, covers, lamp, table, bath]}
     - {category: "Beauty & personal care", keywords: [lipstick, lip, serum, cream, perfume, eau, parfum, edp, attar, attars, shampoo, moisturiser, sunscreen, kajal, foundation, face, facial, deodorant, conditioner, oil, hair, nail, soap, gel, lotion, wash, masks, mask, body]}
 
-# --- Used from Phase 3 onwards ---------------------------------------------
+# --- Pricing and discount analysis ------------------------------------------
 pricing:
   reference_price_quantile: 0.95
   reference_window_weeks: 8        # trailing window, current week included
@@ -82,8 +82,8 @@ discount_analysis:
   min_articles_per_band: 30        # band cells with fewer articles are left blank
   # Baseline for band indexes. "local": the same article's full-price weeks within
   # +/- baseline_window_weeks (controls for lifecycle decay: markdowns come late in an
-  # article's life). "lifetime": all full-price weeks of the article (PROJECT_PLAN 4.3
-  # as written; reported as a sensitivity check).
+  # article's life). "lifetime": all full-price weeks of the article (reported as a
+  # sensitivity check).
   headline_baseline: local
   baseline_window_weeks: 8
   # Article-age buckets (weeks since first sale) used as an extra fixed effect in the

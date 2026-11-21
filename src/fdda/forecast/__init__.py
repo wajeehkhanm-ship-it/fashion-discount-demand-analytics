@@ -1,1 +1,1 @@
-"""Implemented in a later phase (see PROJECT_PLAN.md)."""
+"""Weekly demand forecasting with Prophet and a rolling-origin backtest."""

@@ -1,4 +1,4 @@
-"""Customer RFM features, segments and churn flags (PROJECT_PLAN 4.5).
+"""Customer RFM features, segments and churn flags.
 
 * Snapshot date = last transaction date + 1 day (unless set in config).
 * Recency = days from the last purchase to the snapshot; frequency = distinct purchase days;

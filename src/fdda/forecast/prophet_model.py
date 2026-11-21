@@ -1,4 +1,4 @@
-"""Prophet wrapper for weekly category demand (PROJECT_PLAN 4.6).
+"""Prophet wrapper for weekly category demand.
 
 Yearly seasonality only (weekly data), optional `promo_share` regressor. Predictions are
 clipped at zero. Prophet and cmdstanpy log a lot; this module quiets them.

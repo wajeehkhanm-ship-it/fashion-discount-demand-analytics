@@ -1,4 +1,4 @@
-"""Monthly KPIs, category revenue share and top articles/styles (PROJECT_PLAN 4.4).
+"""Monthly KPIs, category revenue share and top articles/styles.
 
 Input relation: transactions with a per-unit `discount` (see
 `fdda.features.pricing.build_transaction_discounts`). An "order" is one customer's purchases

@@ -1,1 +1,1 @@
-"""Implemented in a later phase (see PROJECT_PLAN.md)."""
+"""Analyses: EDA, discount payback, KPIs, cohorts, customers and the pricing memo."""

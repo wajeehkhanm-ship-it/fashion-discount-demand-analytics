@@ -1,4 +1,4 @@
-"""Monthly acquisition-cohort retention (PROJECT_PLAN 4.5).
+"""Monthly acquisition-cohort retention.
 
 Cohort = the month of a customer's first purchase in the data. Retention in month k = share
 of the cohort that bought anything k months after the cohort month (k = 0 is 100%).

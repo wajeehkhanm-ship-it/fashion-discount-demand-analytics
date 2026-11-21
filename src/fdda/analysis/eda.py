@@ -1,4 +1,4 @@
-"""Exploratory data analysis queries (Phase 2). All heavy lifting happens in DuckDB.
+"""Exploratory data analysis queries. All heavy lifting happens in DuckDB.
 
 Every function takes an open DuckDB connection and a *relation* string (SQL that can
 follow FROM, e.g. from `hm_transactions`) and returns a small pandas DataFrame.
@@ -162,8 +162,8 @@ def price_quantiles(
 def hm_discount_vs_max(max_discount: float) -> str:
     """SQL for a *preliminary* H&M discount: 1 - price / the article's lifetime max price.
 
-    Flagged price outliers are excluded from the max. Phase 3 replaces this with a
-    rolling 8-week P95 reference price (PROJECT_PLAN 4.2).
+    Flagged price outliers are excluded from the max. The discount analysis
+    replaces this with a rolling 8-week P95 reference price.
     """
     ref = "max(CASE WHEN NOT is_price_outlier THEN price END) OVER (PARTITION BY article_id)"
     return f"coalesce(least(greatest(1 - price / {ref}, 0), {float(max_discount)}), 0)"

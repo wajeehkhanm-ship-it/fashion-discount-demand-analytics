@@ -1,4 +1,4 @@
-"""Phase 6 driver: train/evaluate the tagger, tag Myntra, prepare the effort study.
+"""Tagging driver: train/evaluate the tagger, tag Myntra, prepare the effort study.
 
     python -m fdda.tagging.run train        # train on H&M, write metrics to reports/tagging/
     python -m fdda.tagging.run myntra       # tag a Myntra sample with the saved models
@@ -43,7 +43,7 @@ def tagging_interim(settings: dict[str, Any]) -> Path:
 
 
 class Paths:
-    """Where Phase 6 reads and writes."""
+    """Where the tagger reads and writes."""
 
     def __init__(self, settings: dict[str, Any]):
         self.interim = tagging_interim(settings)

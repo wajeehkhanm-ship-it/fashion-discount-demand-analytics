@@ -1,8 +1,9 @@
-"""Weekly demand series per category (PROJECT_PLAN 4.6).
+"""Weekly demand series per category.
 
 Weeks start on Monday. Partial weeks at the start and end of the data are dropped so every
 point is a full week. `promo_share` = share of the category's units sold at least
-`promo_threshold` below the article-week reference price (Phase 3), a promo-intensity signal.
+`promo_threshold` below the article-week reference price (see the discount analysis), a
+promo-intensity signal.
 """
 
 from __future__ import annotations

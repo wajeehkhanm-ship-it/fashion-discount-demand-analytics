@@ -1,6 +1,6 @@
 """Pricing features: reference price, discount %, discount bands and the article x week table.
 
-Method (PROJECT_PLAN 4.2):
+Method:
 * Reference (full) price per article-week = the 95th percentile of the article's observed
   price over a trailing 8-week window (current week included). Flagged price outliers are
   ignored. If the window has fewer than `min_obs` usable sales, the article's lifetime max
