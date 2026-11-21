@@ -61,3 +61,13 @@ def test_formatters_handle_missing_and_nan():
     assert rd.millions(1_060_213, 2) == "1.06M"
     assert rd.dig({"a": {"b": 1}}, "a", "b") == 1 and rd.dig({"a": None}, "a", "b") is None
     assert rd.join_and(["x", "y", "z"]) == "x, y and z" and rd.join_and([]) == "none"
+
+
+def test_unfinished_effort_and_dashboard_are_left_out():
+    f = _empty_facts()
+    f["tagging"] = None  # tagging numbers may be missing too; only the effort clause is checked
+    text = rd.render_readme(f)
+    assert "Timed effort saving" not in text and "saved **" not in text
+    assert "Power BI dashboard: [TBD]" not in text and "Dashboard screenshot" not in text
+    assert "build guide" in text
+    assert "manual tagging time" not in rd.render_resume(f)

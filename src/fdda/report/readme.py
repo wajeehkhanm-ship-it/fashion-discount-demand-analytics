@@ -192,14 +192,22 @@ def render_readme(f: dict[str, Any]) -> str:
     hero = (
         f"![Payback curve: revenue and margin per article-week by discount band]({f['hero']})"
         if f["hero"] and "payback" in f["hero"]
-        else (f"![Dashboard]({f['hero']})" if f["hero"] else "*Dashboard screenshot: [TBD]*")
+        else (f"![Dashboard]({f['hero']})" if f["hero"] else "")
     )
     dash_note = (
         "Dashboard PDF: [`dashboard/dashboard.pdf`](dashboard/dashboard.pdf)."
         if f["has_pdf"]
-        else "Power BI dashboard: [TBD] (built from the export with "
-        "[`dashboard/BUILD_GUIDE.md`](dashboard/BUILD_GUIDE.md))."
+        else "Power BI: star-schema export, DAX measures and a 5-page "
+        "[build guide](dashboard/BUILD_GUIDE.md) in [`dashboard/`](dashboard/)."
     )
+    # Unfinished optional pieces (timed effort study) are left out rather than shown as gaps.
+    has_effort = dig(f["effort"], "effort_reduction") is not None
+    effort_kr = (
+        f"; timed review vs manual tagging saved **{h['effort']}** of the effort."
+        if has_effort
+        else "."
+    )
+    effort_q5 = f" Timed effort saving: {h['effort']}." if has_effort else ""
     fc_line = (
         f"{h['fc_best']} forecasts 12 weeks ahead at **{h['fc_best_mape']} MAPE vs "
         f"{h['fc_naive_mape']}** for a seasonal-naive baseline"
@@ -219,7 +227,7 @@ churn and what to offer them, how demand will move, and how far product tagging 
 > * **Forecasting:** {fc_line} (WAPE {h["fc_best_wape"]} vs {h["fc_naive_wape"]}), winning in
 >   {h["fc_beats"]} of {h["fc_n"]} categories.
 > * **Product tagging:** {h["tag_cat"]} category and {h["tag_sub"]} product-type accuracy on
->   held-out styles; timed review vs manual tagging saved **{h["effort"]}** of the effort.
+>   held-out styles{effort_kr}
 > * **Customers:** {h["winback_customers"]} churned or at-risk customers with
 >   **{h["at_stake"]} indexed revenue at stake**; win-back offers capped at the markdown ceiling.
 
@@ -272,8 +280,7 @@ articles: category {h["tag_cat"]} (baseline {h["tag_cat_base"]}), product type
 {h["tag_sub"]} (baseline {h["tag_sub_base"]}), pattern {h["tag_pat"]}, colour {h["tag_col"]}
 (texts rarely name the colour). Auto-accepting suggestions at ≥90% confidence covers
 {h["tag_cat_auto_cov"]} of products for category at {h["tag_cat_auto_acc"]} accuracy, and
-{h["tag_sub_auto_cov"]} for product type at {h["tag_sub_auto_acc"]}. Timed effort saving:
-{h["effort"]}.
+{h["tag_sub_auto_cov"]} for product type at {h["tag_sub_auto_acc"]}.{effort_q5}
 → [notebook](notebooks/05_product_tagging.ipynb)
 
 ---
@@ -347,16 +354,21 @@ tests/                    pytest suite on a synthetic fixture
 * **Image-based tagging** for colour and pattern.
 
 *I build this README with `python -m fdda.report.readme` from the files in `reports/`, so every
-number matches the analysis; values not measured yet show {TBD}.* · [Repository]({REPO_URL})
+number matches the analysis.* · [Repository]({REPO_URL})
 """
 
 
 def render_resume(f: dict[str, Any]) -> str:
     """Resume bullets, filled from pipeline outputs."""
     h = headline(f)
+    effort = (
+        f", cutting\n  manual tagging time by {h['effort']} in a timed test."
+        if dig(f["effort"], "effort_reduction") is not None
+        else "."
+    )
     return f"""# Resume bullets
 
-*Produced by `python -m fdda.report.readme`; [TBD] marks values not measured yet.*
+*Produced by `python -m fdda.report.readme`.*
 
 **Discount & Demand Analytics for Fashion E-commerce** · Python, DuckDB, Prophet, XGBoost,
 Power BI · {REPO_URL}
@@ -370,8 +382,7 @@ Power BI · {REPO_URL}
   the discount ceiling, plus a 5-page Power BI dashboard model (star schema, DAX measures).
 - Forecast 12-week demand for the top {h["fc_n"]} categories at {h["fc_best_mape"]} MAPE vs
   {h["fc_naive_mape"]} for a seasonal-naive baseline; built an ML product tagger
-  ({h["tag_cat"]} category / {h["tag_sub"]} product-type accuracy on held-out styles), cutting
-  manual tagging time by {h["effort"]} in a timed test.
+  ({h["tag_cat"]} category / {h["tag_sub"]} product-type accuracy on held-out styles){effort}
 """
 
 

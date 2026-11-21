@@ -11,13 +11,13 @@ churn and what to offer them, how demand will move, and how far product tagging 
 > * **Forecasting:** Prophet + promo forecasts 12 weeks ahead at **23.3% MAPE vs 30.4%** for a seasonal-naive baseline (WAPE 20.1% vs 25.2%), winning in
 >   4 of 8 categories.
 > * **Product tagging:** 97.9% category and 89.1% product-type accuracy on
->   held-out styles; timed review vs manual tagging saved **[TBD]** of the effort.
+>   held-out styles.
 > * **Customers:** 546,270 churned or at-risk customers with
 >   **113.8M indexed revenue at stake**; win-back offers capped at the markdown ceiling.
 
 ![Payback curve: revenue and margin per article-week by discount band](reports/figures/payback_threshold_full.png)
 
-Power BI dashboard: [TBD] (built from the export with [`dashboard/BUILD_GUIDE.md`](dashboard/BUILD_GUIDE.md)).
+Power BI: star-schema export, DAX measures and a 5-page [build guide](dashboard/BUILD_GUIDE.md) in [`dashboard/`](dashboard/).
 
 ---
 
@@ -38,7 +38,7 @@ proxy also peaks at 15-25%.
 Monthly revenue, orders, AOV and customers with month-on-month change, category mix and the top
 20 articles and styles. Weekly sales peak in late June and late November; about
 32% of revenue is sold at a discount.
-→ [notebook](notebooks/03_kpis_and_rfm.ipynb) · Power BI dashboard: [TBD] (built from the export with [`dashboard/BUILD_GUIDE.md`](dashboard/BUILD_GUIDE.md)).
+→ [notebook](notebooks/03_kpis_and_rfm.ipynb) · Power BI: star-schema export, DAX measures and a 5-page [build guide](dashboard/BUILD_GUIDE.md) in [`dashboard/`](dashboard/).
 
 **3. Customer health: who is high-value, at risk or lost, and what should we do?**
 1,362,281 customers scored on recency, frequency and monetary value into nine
@@ -64,8 +64,7 @@ articles: category 97.9% (baseline 40.0%), product type
 89.1% (baseline 10.2%), pattern 64.2%, colour 34.3%
 (texts rarely name the colour). Auto-accepting suggestions at ≥90% confidence covers
 94% of products for category at 99.3% accuracy, and
-70% for product type at 96.8%. Timed effort saving:
-[TBD].
+70% for product type at 96.8%.
 → [notebook](notebooks/05_product_tagging.ipynb)
 
 ---
@@ -139,4 +138,4 @@ tests/                    pytest suite on a synthetic fixture
 * **Image-based tagging** for colour and pattern.
 
 *I build this README with `python -m fdda.report.readme` from the files in `reports/`, so every
-number matches the analysis; values not measured yet show [TBD].* · [Repository](https://github.com/wajeehkhanm-ship-it/fashion-discount-demand-analytics)
+number matches the analysis.* · [Repository](https://github.com/wajeehkhanm-ship-it/fashion-discount-demand-analytics)

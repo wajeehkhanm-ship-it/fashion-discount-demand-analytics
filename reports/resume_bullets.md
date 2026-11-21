@@ -1,6 +1,6 @@
 # Resume bullets
 
-*Produced by `python -m fdda.report.readme`; [TBD] marks values not measured yet.*
+*Produced by `python -m fdda.report.readme`.*
 
 **Discount & Demand Analytics for Fashion E-commerce** · Python, DuckDB, Prophet, XGBoost,
 Power BI · https://github.com/wajeehkhanm-ship-it/fashion-discount-demand-analytics
@@ -14,5 +14,4 @@ Power BI · https://github.com/wajeehkhanm-ship-it/fashion-discount-demand-analy
   the discount ceiling, plus a 5-page Power BI dashboard model (star schema, DAX measures).
 - Forecast 12-week demand for the top 8 categories at 23.3% MAPE vs
   30.4% for a seasonal-naive baseline; built an ML product tagger
-  (97.9% category / 89.1% product-type accuracy on held-out styles), cutting
-  manual tagging time by [TBD] in a timed test.
+  (97.9% category / 89.1% product-type accuracy on held-out styles).
