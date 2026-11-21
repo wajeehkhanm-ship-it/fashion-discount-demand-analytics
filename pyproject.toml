@@ -22,7 +22,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "pytest>=8.0",
-    "ruff>=0.6",
+    "ruff==0.17.6",  # pinned so CI formats exactly like local
     "pre-commit>=3.7",
 ]
 analysis = [
@@ -54,6 +54,8 @@ select = ["E", "F", "I", "UP", "B", "SIM"]
 [tool.ruff.lint.per-file-ignores]
 # Notebooks hold chart titles/labels on one line for readability.
 "*.ipynb" = ["E501"]
+# README template: Markdown table rows must stay on one line.
+"src/fdda/report/readme.py" = ["E501"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

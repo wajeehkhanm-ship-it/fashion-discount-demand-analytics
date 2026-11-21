@@ -29,14 +29,24 @@ from fdda.tagging import labels as lb
 from fdda.tagging import model as md
 
 log = get_logger(__name__)
-MODE = "full"  # the article catalogue is the same in dev and full mode
+
+
+def tagging_interim(settings: dict[str, Any]) -> Path:
+    """Cleaned data folder for tagging: full data when it exists, else dev.
+
+    The article catalogue is identical in both modes (only transactions are sampled), so the
+    tagger is the same; only the Myntra sample differs.
+    """
+    base = resolve_path(settings, "interim")
+    full = base / "full"
+    return full if (full / "hm" / "articles.parquet").exists() else base / "dev"
 
 
 class Paths:
     """Where Phase 6 reads and writes."""
 
     def __init__(self, settings: dict[str, Any]):
-        self.interim = resolve_path(settings, "interim") / MODE
+        self.interim = tagging_interim(settings)
         self.data = resolve_path(settings, "processed") / "tagging"
         self.reports = resolve_path(settings, "reports") / "tagging"
         self.bundle = self.data / "tagger.joblib"
