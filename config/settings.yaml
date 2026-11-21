@@ -137,9 +137,19 @@ customers:
       kpi: "Reactivation rate; list hygiene (unsubscribes, bounces)"
 
 forecast:
-  top_n_categories: 8
+  category_level: product_group_name
+  top_n_categories: 8              # by total units
   horizon_weeks: 12
-  n_folds: 4
+  n_folds: 4                       # rolling-origin folds, non-overlapping, last 4 x 12 weeks
+  season_length_weeks: 52          # seasonal-naive baseline: same week last year
+  horizon_buckets: [[1, 4], [5, 8], [9, 12]]
+  promo_threshold: 0.05            # promo intensity = share of units >= 5% off
+  chart_history_weeks: 52
+  prophet:
+    yearly_seasonality: 6          # Fourier order; kept low, < 2 years of history
+    seasonality_mode: multiplicative
+    changepoint_prior_scale: 0.05
+    interval_width: 0.80
 
 llm:
   cache_dir: data/interim/llm_cache

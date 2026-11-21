@@ -14,14 +14,15 @@ help:
 	@echo "discount   discount payback tables -> reports/discount/ (FDDA_MODE=full for final numbers)"
 	@echo "customers  KPIs, RFM, cohorts, win-back playbook -> reports/customers/"
 	@echo "analysis   eda + discount + customers + their notebooks"
-	@echo "forecast | tag | export   (later phases)"
+	@echo "forecast   backtest + 12-week forecast -> reports/forecast/, notebook 04"
+	@echo "tag | export   (later phases)"
 	@echo "all        everything, in order"
 	@echo "test | lint | format"
 
 setup:
 	$(PYTHON) -m venv $(VENV)
 	$(PY) -m pip install --upgrade pip
-	$(PY) -m pip install -e ".[dev,analysis]"
+	$(PY) -m pip install -e ".[dev,analysis,forecast]"
 	$(VENV)/bin/pre-commit install
 
 data: download clean-data
@@ -50,7 +51,8 @@ kpi-notebook:
 analysis: eda discount payback-notebook customers kpi-notebook
 
 forecast:
-	@echo "forecast: not built yet (Phase 5)"; exit 1
+	$(PY) -m fdda.forecast.backtest
+	$(PY) -m jupyter nbconvert --to notebook --execute --inplace notebooks/04_forecasting.ipynb
 
 tag:
 	@echo "tag: not built yet (Phase 6)"; exit 1

@@ -366,6 +366,37 @@ def stacked_bars(
     ax.legend(loc="upper left", bbox_to_anchor=(1.0, 1.0))
 
 
+def forecast_panel(
+    ax: Axes,
+    actual: tuple[Sequence, Sequence],
+    forecast: tuple[Sequence, Sequence, Sequence, Sequence],
+    *,
+    baseline: tuple[Sequence, Sequence] | None = None,
+    title: str = "",
+    labels: tuple[str, str, str] = ("Actual", "Forecast", "Seasonal naive"),
+) -> None:
+    """Actual line, forecast line with its interval band, and an optional baseline line.
+
+    `actual` = (dates, values); `forecast` = (dates, yhat, lower, upper).
+    """
+    ax.plot(actual[0], actual[1], color=TEXT_SECONDARY, linewidth=1.5, label=labels[0])
+    ds, yhat, lo, hi = forecast
+    ax.fill_between(ds, lo, hi, color=SERIES[0], alpha=0.18, linewidth=0, label="80% interval")
+    ax.plot(ds, yhat, color=SERIES[0], linewidth=2, label=labels[1])
+    if baseline is not None:
+        ax.plot(
+            baseline[0],
+            baseline[1],
+            color=SERIES[1],
+            linewidth=1.5,
+            linestyle="--",
+            label=labels[2],
+        )
+    ax.set_title(title, fontsize=10, loc="left")
+    ax.set_ylim(bottom=0)
+    ax.grid(axis="x", visible=False)
+
+
 def save_fig(fig: Figure, name: str, out_dir: Path) -> Path:
     """Save a figure as PNG under `out_dir` and return the path."""
     out_dir = Path(out_dir)

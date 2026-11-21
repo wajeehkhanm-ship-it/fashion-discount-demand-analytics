@@ -1,0 +1,49 @@
+{
+  "mode": "dev",
+  "categories": [
+    "Garment Upper body",
+    "Garment Lower body",
+    "Garment Full body",
+    "Swimwear",
+    "Underwear",
+    "Accessories",
+    "Shoes",
+    "Socks & Tights"
+  ],
+  "weeks": 104,
+  "first_week": "2018-09-24",
+  "last_week": "2020-09-14",
+  "test_weeks": "2019-10-21 to 2020-09-14",
+  "horizon_weeks": 12,
+  "n_folds": 4,
+  "seconds": 8.5,
+  "horizon_bucket_overall": "1-12",
+  "overall": {
+    "prophet": {
+      "mape": 0.23327636238501057,
+      "wape": 0.20868505564717935
+    },
+    "prophet_promo": {
+      "mape": 0.24079666061428875,
+      "wape": 0.2031081685229834
+    },
+    "seasonal_naive": {
+      "mape": 0.3014598712204269,
+      "wape": 0.2479255436752583
+    }
+  },
+  "best_prophet_model": "prophet_promo",
+  "best_beats_naive_overall_wape": true,
+  "best_beats_naive_overall_mape": true,
+  "categories_where_best_beats_naive_wape": [
+    "Garment Lower body",
+    "Garment Upper body",
+    "Shoes",
+    "Underwear"
+  ],
+  "n_categories": 8,
+  "interval_coverage": {
+    "prophet": 0.734375,
+    "prophet_promo": 0.6015625
+  }
+}
