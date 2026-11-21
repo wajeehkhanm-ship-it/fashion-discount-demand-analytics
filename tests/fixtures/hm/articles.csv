@@ -1,0 +1,41 @@
+article_id,product_code,prod_name,product_type_name,product_group_name,graphical_appearance_name,colour_group_name,section_name,garment_group_name,detail_desc
+0500000001,0500000,Solid T-shirt 0,T-shirt,Garment Upper body,Solid,Black,Womens Everyday Basics,Jersey Basic,Solid t-shirt in black cotton blend.
+0500000002,0500000,Stripe Sweater 1,Sweater,Garment Upper body,Stripe,Dark Blue,Womens Tailoring,Knitwear,Stripe sweater in dark blue cotton blend.
+0500001001,0500001,Stripe Trousers 2,Trousers,Garment Lower body,Stripe,White,Mens Trousers,Trousers,Stripe trousers in white cotton blend.
+0500001002,0500001,Solid Dress 3,Dress,Garment Full body,Solid,Black,Womens Casual,Dresses Ladies,Solid dress in black cotton blend.
+0500002001,0500002,Melange Bag 4,Bag,Accessories,Melange,Grey,Womens Big accessories,Accessories,Melange bag in grey cotton blend.
+0500002002,0500002,Solid Sneakers 5,Sneakers,Shoes,Solid,Black,Womens Shoes,Shoes,Solid sneakers in black cotton blend.
+0500003001,0500003,Stripe T-shirt 6,T-shirt,Garment Upper body,Stripe,Black,Womens Everyday Basics,Jersey Basic,Stripe t-shirt in black cotton blend.
+0500003002,0500003,Solid Sweater 7,Sweater,Garment Upper body,Solid,White,Womens Tailoring,Knitwear,Solid sweater in white cotton blend.
+0500004001,0500004,Stripe Trousers 8,Trousers,Garment Lower body,Stripe,Grey,Mens Trousers,Trousers,Stripe trousers in grey cotton blend.
+0500004002,0500004,Melange Dress 9,Dress,Garment Full body,Melange,Grey,Womens Casual,Dresses Ladies,Melange dress in grey cotton blend.
+0500005001,0500005,Melange Bag 10,Bag,Accessories,Melange,White,Womens Big accessories,Accessories,Melange bag in white cotton blend.
+0500005002,0500005,All over pattern Sneakers 11,Sneakers,Shoes,All over pattern,Grey,Womens Shoes,Shoes,All over pattern sneakers in grey cotton blend.
+0500006001,0500006,Stripe T-shirt 12,T-shirt,Garment Upper body,Stripe,Black,Womens Everyday Basics,Jersey Basic,Stripe t-shirt in black cotton blend.
+0500006002,0500006,All over pattern Sweater 13,Sweater,Garment Upper body,All over pattern,Light Pink,Womens Tailoring,Knitwear,All over pattern sweater in light pink cotton blend.
+0500007001,0500007,Stripe Trousers 14,Trousers,Garment Lower body,Stripe,Dark Blue,Mens Trousers,Trousers,Stripe trousers in dark blue cotton blend.
+0500007002,0500007,All over pattern Dress 15,Dress,Garment Full body,All over pattern,White,Womens Casual,Dresses Ladies,All over pattern dress in white cotton blend.
+0500008001,0500008,Solid Bag 16,Bag,Accessories,Solid,Black,Womens Big accessories,Accessories,Solid bag in black cotton blend.
+0500008002,0500008,Solid Sneakers 17,Sneakers,Shoes,Solid,Light Pink,Womens Shoes,Shoes,Solid sneakers in light pink cotton blend.
+0500009001,0500009,All over pattern T-shirt 18,T-shirt,Garment Upper body,All over pattern,Dark Blue,Womens Everyday Basics,Jersey Basic,All over pattern t-shirt in dark blue cotton blend.
+0500009002,0500009,All over pattern Sweater 19,Sweater,Garment Upper body,All over pattern,Grey,Womens Tailoring,Knitwear,All over pattern sweater in grey cotton blend.
+0500010001,0500010,Melange Trousers 20,Trousers,Garment Lower body,Melange,Black,Mens Trousers,Trousers,Melange trousers in black cotton blend.
+0500010002,0500010,Solid Dress 21,Dress,Garment Full body,Solid,Grey,Womens Casual,Dresses Ladies,Solid dress in grey cotton blend.
+0500011001,0500011,Solid Bag 22,Bag,Accessories,Solid,Light Pink,Womens Big accessories,Accessories,Solid bag in light pink cotton blend.
+0500011002,0500011,All over pattern Sneakers 23,Sneakers,Shoes,All over pattern,Grey,Womens Shoes,Shoes,All over pattern sneakers in grey cotton blend.
+0500012001,0500012,All over pattern T-shirt 24,T-shirt,Garment Upper body,All over pattern,Grey,Womens Everyday Basics,Jersey Basic,All over pattern t-shirt in grey cotton blend.
+0500012002,0500012,Stripe Sweater 25,Sweater,Garment Upper body,Stripe,Grey,Womens Tailoring,Knitwear,Stripe sweater in grey cotton blend.
+0500013001,0500013,Solid Trousers 26,Trousers,Garment Lower body,Solid,Black,Mens Trousers,Trousers,Solid trousers in black cotton blend.
+0500013002,0500013,All over pattern Dress 27,Dress,Garment Full body,All over pattern,White,Womens Casual,Dresses Ladies,All over pattern dress in white cotton blend.
+0500014001,0500014,Stripe Bag 28,Bag,Accessories,Stripe,Black,Womens Big accessories,Accessories,Stripe bag in black cotton blend.
+0500014002,0500014,Melange Sneakers 29,Sneakers,Shoes,Melange,Black,Womens Shoes,Shoes,Melange sneakers in black cotton blend.
+0500015001,0500015,Melange T-shirt 30,T-shirt,Garment Upper body,Melange,Dark Blue,Womens Everyday Basics,Jersey Basic,Melange t-shirt in dark blue cotton blend.
+0500015002,0500015,Stripe Sweater 31,Sweater,Garment Upper body,Stripe,Dark Blue,Womens Tailoring,Knitwear,Stripe sweater in dark blue cotton blend.
+0500016001,0500016,All over pattern Trousers 32,Trousers,Garment Lower body,All over pattern,Dark Blue,Mens Trousers,Trousers,All over pattern trousers in dark blue cotton blend.
+0500016002,0500016,All over pattern Dress 33,Dress,Garment Full body,All over pattern,White,Womens Casual,Dresses Ladies,All over pattern dress in white cotton blend.
+0500017001,0500017,Stripe Bag 34,Bag,Accessories,Stripe,Black,Womens Big accessories,Accessories,Stripe bag in black cotton blend.
+0500017002,0500017,Stripe Sneakers 35,Sneakers,Shoes,Stripe,Grey,Womens Shoes,Shoes,Stripe sneakers in grey cotton blend.
+0500018001,0500018,Melange T-shirt 36,T-shirt,Garment Upper body,Melange,White,Womens Everyday Basics,Jersey Basic,Melange t-shirt in white cotton blend.
+0500018002,0500018,All over pattern Sweater 37,Sweater,Garment Upper body,All over pattern,Light Pink,Womens Tailoring,Knitwear,All over pattern sweater in light pink cotton blend.
+0500019001,0500019,Stripe Trousers 38,Trousers,Garment Lower body,Stripe,Grey,Mens Trousers,Trousers,Stripe trousers in grey cotton blend.
+0500019002,0500019,Solid Dress 39,Dress,Garment Full body,Solid,Dark Blue,Womens Casual,Dresses Ladies,Solid dress in dark blue cotton blend.

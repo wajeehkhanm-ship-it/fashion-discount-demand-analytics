@@ -1,5 +1,6 @@
 # --- Project data & secrets (never commit) ---
-data/
+# Leading slash = only the top-level data/ folder (not src/fdda/data/, which is code)
+/data/
 .env
 .env.*
 !.env.example

@@ -1,0 +1,72 @@
+# Single source of truth for paths, seeds and analysis parameters.
+# Paths are relative to the repo root.
+
+project:
+  seed: 42
+
+# Dev mode samples a fixed share of customers (H&M) / listings (Myntra) so every
+# step runs in minutes. Final numbers must come from dev_mode: false.
+dev_mode: true
+dev_sample_fraction: 0.10
+
+paths:
+  raw: data/raw
+  interim: data/interim          # cleaned Parquet goes to data/interim/<dev|full>/
+  processed: data/processed
+  reports: reports
+  figures: reports/figures
+
+duckdb:
+  memory_limit: 4GB
+  temp_directory: data/interim/_duckdb_tmp
+
+datasets:
+  hm:
+    competition: h-and-m-personalized-fashion-recommendations
+    # Only the tabular files; the competition's ~30 GB of images are not needed.
+    files: [transactions_train.csv, articles.csv, customers.csv]
+  myntra:
+    dataset: ronakbokaria/myntra-products-dataset
+    # Source column names (matched case-insensitively). The source "discount"
+    # column mixes rupees and percent, so discount is recomputed from price/mrp.
+    columns:
+      id: id
+      name: name
+      price: price
+      mrp: mrp
+      rating: rating
+      rating_total: ratingTotal
+      seller: seller
+
+cleaning:
+  # H&M prices are normalized to ~0-1. Revenue is reported as "indexed revenue"
+  # = price x this factor. It is a readability rescale, not a currency.
+  price_rescale_factor: 1000
+  # Flag (do not drop) H&M rows priced above this multiple of the article median.
+  price_outlier_multiple: 5
+  max_discount: 0.90
+
+# --- Used from Phase 3 onwards ---------------------------------------------
+pricing:
+  reference_price_quantile: 0.95
+  reference_window_weeks: 8
+  discount_bands:
+    edges: [0.0, 0.05, 0.15, 0.25, 0.35, 0.45, 0.55, 0.90]
+    labels: ["0-5%", "5-15%", "15-25%", "25-35%", "35-45%", "45-55%", "55%+"]
+  margin_scenarios: [0.50, 0.60, 0.70]
+
+customers:
+  snapshot_date: null            # null = last transaction date + 1 day
+  churn_window_days: 120
+  churn_sensitivity_days: [90, 120, 180]
+  # RFM segment mapping table is added in Phase 4.
+
+forecast:
+  top_n_categories: 8
+  horizon_weeks: 12
+  n_folds: 4
+
+llm:
+  cache_dir: data/interim/llm_cache
+  eval_sample_size: 1000
+  myntra_sample_size: 5000
