@@ -1,0 +1,32 @@
+table,column,type,non_null,null_pct,approx_unique,min,max
+hm_transactions,t_dat,DATE,3157777,0.0,727,2018-09-20,2020-09-22
+hm_transactions,customer_id,VARCHAR,3157777,0.0,131030,00008469a21b50b3d147c97135e25b4201a8c58997f78782a0cc706645e14493,ffffcf35913a0bee60e8741cb2b4e78b8a98ee5ff2e6a1778d0116cffd259264
+hm_transactions,article_id,VARCHAR,3157777,0.0,83510,0108775015,0956217002
+hm_transactions,product_code,VARCHAR,3157777,0.0,39892,0108775,0956217
+hm_transactions,product_group_name,VARCHAR,3157777,0.0,19,Accessories,Unknown
+hm_transactions,product_type_name,VARCHAR,3157777,0.0,130,Accessories set,Zipper head
+hm_transactions,section_name,VARCHAR,3157777,0.0,57,Baby Boy,Young Girl
+hm_transactions,garment_group_name,VARCHAR,3157777,0.0,21,Accessories,Woven/Jersey/Knitted mix Baby
+hm_transactions,sales_channel_id,INTEGER,3157777,0.0,2,1,2
+hm_transactions,price,DOUBLE,3157777,0.0,6547,3.389830508474576e-05,0.5915254237288136
+hm_transactions,indexed_price,DOUBLE,3157777,0.0,6594,0.03389830508474576,591.5254237288135
+hm_transactions,is_price_outlier,BOOLEAN,3157777,0.0,2,false,true
+hm_transactions,year_month,VARCHAR,3157777,0.0,25,2018-09,2020-09
+hm_articles,article_id,VARCHAR,105542,0.0,99941,0108775015,0959461001
+hm_articles,product_code,VARCHAR,105542,0.0,47002,0108775,0959461
+hm_articles,prod_name,VARCHAR,105542,0.0,47986,& Denim Boyfriend LW denim,Åsa Dress
+hm_articles,product_type_name,VARCHAR,105542,0.0,132,Accessories set,Zipper head
+hm_articles,product_group_name,VARCHAR,105542,0.0,19,Accessories,Unknown
+hm_articles,graphical_appearance_name,VARCHAR,105542,0.0,29,All over pattern,Unknown
+hm_articles,colour_group_name,VARCHAR,105542,0.0,51,Beige,Yellowish Brown
+hm_articles,section_name,VARCHAR,105542,0.0,57,Baby Boy,Young Girl
+hm_articles,garment_group_name,VARCHAR,105542,0.0,21,Accessories,Woven/Jersey/Knitted mix Baby
+hm_articles,detail_desc,VARCHAR,105130,0.0039000000000000003,42252,12 pairs earrings in various designs with a party theme.,{b> <b}Knitted socks in cotton-blend terry. The cotton content is organic.
+myntra_products,id,VARCHAR,106089,0.0,103889,1,999986
+myntra_products,name,VARCHAR,106089,0.0,48156,#We Are Colors Eyeshadow-02,x The Lion King Eyeshadow
+myntra_products,seller,VARCHAR,106089,0.0,4844,109F,zebu
+myntra_products,price,DOUBLE,106089,0.0,5359,25.0,146300.0
+myntra_products,mrp,DOUBLE,106089,0.0,4954,25.0,146300.0
+myntra_products,discount_pct,DOUBLE,106089,0.0,14989,0.0,0.9
+myntra_products,rating,DOUBLE,106089,0.0,40,0.0,5.0
+myntra_products,rating_total,BIGINT,106089,0.0,890,0,75100

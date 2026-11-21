@@ -46,6 +46,25 @@ cleaning:
   price_outlier_multiple: 5
   max_discount: 0.90
 
+eda:
+  sample_rows: 200000            # rows sampled for distribution plots
+  top_n_groups: 8                # categories beyond this fold into "Other"
+  # Myntra has no category column. Rough keyword rules on the product name,
+  # first match wins (whole-word, case-insensitive). Phase 6 replaces this with LLM tags.
+  myntra_category_rules:
+    - {category: "Innerwear & nightwear", keywords: [bra, bras, briefs, boxers, trunks, panties, lingerie, night, nightdress, nightsuit, pyjamas, lounge, camisole, thermal, shapewear, innerwear, vest, vests, tights]}
+    - {category: "Ethnic wear", keywords: [kurta, kurtas, kurti, kurtis, saree, sarees, lehenga, dupatta, salwar, sherwani, ethnic, anarkali, churidar, suit]}
+    - {category: "Tops & T-shirts", keywords: [t-shirt, t-shirts, tshirt, polo, top, tops, tank, tunic, crop]}
+    - {category: "Shirts", keywords: [shirt, shirts]}
+    - {category: "Dresses & jumpsuits", keywords: [dress, dresses, jumpsuit, gown, playsuit]}
+    - {category: "Bottoms", keywords: [jeans, trousers, pants, shorts, skirt, skirts, joggers, leggings, palazzo, palazzos, capris, chinos]}
+    - {category: "Jackets & sweaters", keywords: [jacket, jackets, sweater, sweatshirt, hoodie, blazer, coat, cardigan, pullover, shrug]}
+    - {category: "Footwear", keywords: [shoes, sneakers, sandals, heels, flip-flops, slippers, boots, loafers, flats, mojaris, juttis, slides]}
+    - {category: "Jewellery & watches", keywords: [earrings, necklace, jewellery, ring, rings, bracelet, bangles, pendant, anklet, chain, diamond, watch, watches, smartwatch]}
+    - {category: "Bags & accessories", keywords: [bag, bags, handbag, backpack, wallet, belt, cap, sunglasses, frames, socks, scarf, stole, tie, case, iphone, phone]}
+    - {category: "Home", keywords: [pillow, bedsheet, bedsheets, cushion, curtain, curtains, towel, towels, blanket, quilt, comforter, dohar, mat, rug, covers, lamp, table, bath]}
+    - {category: "Beauty & personal care", keywords: [lipstick, lip, serum, cream, perfume, eau, parfum, edp, attar, attars, shampoo, moisturiser, sunscreen, kajal, foundation, face, facial, deodorant, conditioner, oil, hair, nail, soap, gel, lotion, wash, masks, mask, body]}
+
 # --- Used from Phase 3 onwards ---------------------------------------------
 pricing:
   reference_price_quantile: 0.95

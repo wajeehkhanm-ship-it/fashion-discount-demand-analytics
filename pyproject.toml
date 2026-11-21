@@ -25,6 +25,12 @@ dev = [
     "ruff>=0.6",
     "pre-commit>=3.7",
 ]
+analysis = [
+    "matplotlib>=3.8",
+    "jupyter>=1.0",
+    "nbconvert>=7.0",
+    "ipykernel>=6.0",
+]
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -36,6 +42,10 @@ src = ["src", "tests"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.ruff.lint.per-file-ignores]
+# Notebooks hold chart titles/labels on one line for readability.
+"*.ipynb" = ["E501"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

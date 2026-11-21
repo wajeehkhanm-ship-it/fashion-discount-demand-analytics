@@ -1,0 +1,12 @@
+dataset,step,rows_removed,rows_left,pct_of_raw_left
+H&M,raw file,0,31788324,1.0
+H&M,missing or unparseable,0,31788324,1.0
+H&M,nonpositive price,0,31788324,1.0
+H&M,unknown article,0,31788324,1.0
+H&M,dev sample,28630547,3157777,0.09933763730355838
+Myntra,raw file,0,1060213,1.0
+Myntra,missing id or name,0,1060213,1.0
+Myntra,duplicate id,0,1060213,1.0
+Myntra,invalid price,0,1060213,1.0
+Myntra,invalid mrp,0,1060213,1.0
+Myntra,dev sample,954124,106089,0.100063855093269

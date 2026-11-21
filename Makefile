@@ -3,13 +3,14 @@ PYTHON ?= $(shell command -v python3.11 2>/dev/null || echo /opt/homebrew/bin/py
 VENV   := .venv
 PY     := $(VENV)/bin/python
 
-.PHONY: help setup data download clean-data analysis forecast tag export all test lint format
+.PHONY: help setup data download clean-data eda analysis forecast tag export all test lint format
 
 help:
 	@echo "setup      create .venv, install deps, install pre-commit hooks"
 	@echo "data       download raw data from Kaggle, then clean -> Parquet"
 	@echo "download   only download raw data"
 	@echo "clean-data only clean raw data -> data/interim/<dev|full>/"
+	@echo "eda        run notebooks/01_eda.ipynb end to end (figures -> reports/figures/)"
 	@echo "analysis | forecast | tag | export   (later phases)"
 	@echo "all        everything, in order"
 	@echo "test | lint | format"
@@ -17,7 +18,7 @@ help:
 setup:
 	$(PYTHON) -m venv $(VENV)
 	$(PY) -m pip install --upgrade pip
-	$(PY) -m pip install -e ".[dev]"
+	$(PY) -m pip install -e ".[dev,analysis]"
 	$(VENV)/bin/pre-commit install
 
 data: download clean-data
@@ -28,8 +29,11 @@ download:
 clean-data:
 	$(PY) -m fdda.data.clean
 
-analysis:
-	@echo "analysis: not built yet (Phases 3-4)"; exit 1
+eda:
+	$(PY) -m jupyter nbconvert --to notebook --execute --inplace notebooks/01_eda.ipynb
+
+analysis: eda
+	@echo "analysis: discount/KPI/RFM steps not built yet (Phases 3-4)"; exit 1
 
 forecast:
 	@echo "forecast: not built yet (Phase 5)"; exit 1
