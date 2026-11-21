@@ -5,7 +5,10 @@
 .env.*
 !.env.example
 
-# --- Power BI backups / temp files ---
+# --- Power BI ---
+# A .pbix embeds the imported data (H&M licence: no redistribution): commit the PDF and
+# screenshots instead.
+*.pbix
 *.pbix.bak
 *.pbit.bak
 ~$*.pbix

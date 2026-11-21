@@ -1,0 +1,382 @@
+// =============================================================================
+// Fashion Discount & Demand Analytics - DAX measures
+// Paste each block into Power BI Desktop: Modeling > New measure (or New table for the
+// calculated tables in section 0). Table and column names match
+// `python -m fdda.export.powerbi` (see dashboard/data_dictionary.md).
+// Revenue is INDEXED revenue (H&M prices are normalised), never a currency amount.
+// Put all measures in one empty "_Measures" table (Home > Enter data > Load) to keep them tidy.
+// =============================================================================
+
+
+// -----------------------------------------------------------------------------
+// 0. Calculated tables (Modeling > New table)
+// -----------------------------------------------------------------------------
+
+// Slicer values for the margin assumption used on the Discount page (no cost data exists,
+// so the margin index is shown for an assumed full-price gross margin).
+Margin Scenario =
+DATATABLE ( "margin", DOUBLE, { { 0.5 }, { 0.6 }, { 0.7 } } )
+
+// Slicer values for the churn definition (no purchase in the last N days).
+Churn Window =
+DATATABLE ( "days", INTEGER, { { 90 }, { 120 }, { 180 } } )
+
+// Slicer values for the forecast model shown on the Forecast page.
+Forecast Model =
+DATATABLE (
+    "model", STRING,
+    "model_label", STRING,
+    {
+        { "prophet_promo", "Prophet + promo" },
+        { "prophet", "Prophet" },
+        { "seasonal_naive", "Seasonal naive" }
+    }
+)
+
+// One row per category used in the Phase 3 tables (includes "All"); relate it to
+// fact_discount_bands[category] and fact_discount_thresholds[category] (1 to many).
+dim_discount_category =
+DISTINCT ( fact_discount_bands[category] )
+
+
+// -----------------------------------------------------------------------------
+// 1. Sales (fact_sales) - Executive and Category pages
+// -----------------------------------------------------------------------------
+
+// Indexed revenue: normalised price x fixed factor, summed over units sold.
+Revenue (indexed) =
+SUM ( fact_sales[indexed_revenue] )
+
+// Units sold (each H&M transaction row is one unit).
+Units =
+SUM ( fact_sales[units] )
+
+// What the same units would have earned at their full (reference) price.
+Full-Price Value =
+SUM ( fact_sales[full_price_value] )
+
+// Average depth of discount actually given: 1 - revenue / full-price value.
+Avg Discount % =
+1 - DIVIDE ( [Revenue (indexed)], [Full-Price Value] )
+
+// Revenue from units sold at least 5% below the reference price.
+Discounted Revenue =
+SUM ( fact_sales[discounted_revenue] )
+
+// Share of revenue that came from discounted units.
+Discounted Revenue Share =
+DIVIDE ( [Discounted Revenue], [Revenue (indexed)] )
+
+// Share of units sold at a discount.
+Discounted Unit Share =
+DIVIDE ( SUM ( fact_sales[discounted_units] ), [Units] )
+
+// Average indexed price per unit.
+Avg Price per Unit =
+DIVIDE ( [Revenue (indexed)], [Units] )
+
+// Share of revenue within the current selection of dates/channels, ignoring the
+// product filters (use on category bars to show each category's share).
+Category Revenue Share =
+DIVIDE (
+    [Revenue (indexed)],
+    CALCULATE ( [Revenue (indexed)], REMOVEFILTERS ( dim_article ), REMOVEFILTERS ( dim_product_group ) )
+)
+
+// Revenue in the previous month. Weekly facts are dated by the week's Monday, so a week
+// belongs to the month its Monday falls in.
+Revenue Previous Month =
+CALCULATE ( [Revenue (indexed)], DATEADD ( dim_date[date], -1, MONTH ) )
+
+// Month-on-month change in revenue (blank when there is no previous month).
+Revenue MoM % =
+VAR prev = [Revenue Previous Month]
+RETURN IF ( NOT ISBLANK ( prev ), DIVIDE ( [Revenue (indexed)] - prev, prev ) )
+
+// Year-on-year change (data covers Sep 2018 - Sep 2020, so only the second year has one).
+Revenue YoY % =
+VAR prev = CALCULATE ( [Revenue (indexed)], SAMEPERIODLASTYEAR ( dim_date[date] ) )
+RETURN IF ( NOT ISBLANK ( prev ), DIVIDE ( [Revenue (indexed)] - prev, prev ) )
+
+// Rank of an article by revenue within the current selection (for "top 20" tables you can
+// also use the visual's Top N filter on dim_article[prod_name] by Revenue (indexed)).
+Article Revenue Rank =
+IF (
+    HASONEVALUE ( dim_article[article_id] ),
+    RANKX ( ALLSELECTED ( dim_article[article_id] ), [Revenue (indexed)], , DESC, DENSE )
+)
+
+
+// -----------------------------------------------------------------------------
+// 2. Monthly KPIs (fact_kpi_monthly) - Executive page
+//    Orders and active customers are distinct counts per month: they cannot be summed
+//    across months, so these measures show a value only for a single month.
+// -----------------------------------------------------------------------------
+
+// Orders = one customer's purchases on one day in one channel (H&M has no order id).
+Orders =
+IF ( HASONEVALUE ( dim_date[year_month] ), SUM ( fact_kpi_monthly[orders] ) )
+
+// Customers who bought at least once in the month.
+Active Customers =
+IF ( HASONEVALUE ( dim_date[year_month] ), SUM ( fact_kpi_monthly[customers] ) )
+
+// Average order value (indexed revenue per order) for the month.
+AOV =
+IF (
+    HASONEVALUE ( dim_date[year_month] ),
+    DIVIDE ( SUM ( fact_kpi_monthly[indexed_revenue] ), SUM ( fact_kpi_monthly[orders] ) )
+)
+
+// Month-on-month change in orders and AOV, read from the exported table.
+Orders MoM % =
+IF ( HASONEVALUE ( dim_date[year_month] ), SUM ( fact_kpi_monthly[orders_mom] ) )
+
+AOV MoM % =
+IF ( HASONEVALUE ( dim_date[year_month] ), SUM ( fact_kpi_monthly[aov_mom] ) )
+
+// 1 for months the data covers only partly (first and last month); filter these out of
+// trend visuals.
+Is Partial Month =
+IF (
+    HASONEVALUE ( dim_date[year_month] ),
+    IF ( SELECTEDVALUE ( fact_kpi_monthly[is_partial_month] ), 1, 0 )
+)
+
+// Whole-period orders and AOV for cards (sums of monthly orders are exact because an
+// order happens on one day, which falls in exactly one month).
+Orders (total) =
+SUM ( fact_kpi_monthly[orders] )
+
+AOV (total) =
+DIVIDE ( SUM ( fact_kpi_monthly[indexed_revenue] ), [Orders (total)] )
+
+
+// -----------------------------------------------------------------------------
+// 3. Discount analysis (fact_discount_bands, fact_discount_thresholds) - Discount page
+//    One row per category x band x baseline. Select one category (dim_discount_category)
+//    and one baseline (fact_discount_bands[baseline], use "local" as the headline).
+// -----------------------------------------------------------------------------
+
+// Units per week in a band vs the same article at full price (median across articles).
+Units Index =
+IF (
+    HASONEVALUE ( fact_discount_bands[category] ) && HASONEVALUE ( fact_discount_bands[baseline] ),
+    MAX ( fact_discount_bands[units_index] )
+)
+
+// Revenue per week in a band vs full price.
+Revenue Index =
+IF (
+    HASONEVALUE ( fact_discount_bands[category] ) && HASONEVALUE ( fact_discount_bands[baseline] ),
+    MAX ( fact_discount_bands[revenue_index] )
+)
+
+// Margin per week in a band vs full price, for each assumed full-price gross margin.
+Margin Index 50% =
+IF (
+    HASONEVALUE ( fact_discount_bands[category] ) && HASONEVALUE ( fact_discount_bands[baseline] ),
+    MAX ( fact_discount_bands[margin_index_50] )
+)
+
+Margin Index 60% =
+IF (
+    HASONEVALUE ( fact_discount_bands[category] ) && HASONEVALUE ( fact_discount_bands[baseline] ),
+    MAX ( fact_discount_bands[margin_index_60] )
+)
+
+Margin Index 70% =
+IF (
+    HASONEVALUE ( fact_discount_bands[category] ) && HASONEVALUE ( fact_discount_bands[baseline] ),
+    MAX ( fact_discount_bands[margin_index_70] )
+)
+
+// Margin index for the margin chosen in the Margin Scenario slicer (default 60%).
+Margin Index (selected) =
+SWITCH (
+    SELECTEDVALUE ( 'Margin Scenario'[margin], 0.6 ),
+    0.5, [Margin Index 50%],
+    0.6, [Margin Index 60%],
+    0.7, [Margin Index 70%]
+)
+
+// Reference line: 1.0 = the same per week as at full price.
+Full Price Reference =
+1
+
+// The markdown ceiling for the selected category, margin and baseline: the deepest band
+// before extra discount starts to cut margin, among discount levels (Phase 3).
+Ceiling Band =
+VAR m = SELECTEDVALUE ( 'Margin Scenario'[margin], 0.6 )
+VAR measureName = "margin_index_" & FORMAT ( m * 100, "0" )
+VAR base = SELECTEDVALUE ( fact_discount_bands[baseline], "local" )
+RETURN
+    CALCULATE (
+        MAX ( fact_discount_thresholds[ceiling_band] ),
+        fact_discount_thresholds[measure] = measureName,
+        fact_discount_thresholds[reference] <> "full price",
+        fact_discount_thresholds[baseline] = base
+    )
+
+// Card text, e.g. "Markdown ceiling: 15-25%".
+Ceiling Label =
+"Markdown ceiling: " & [Ceiling Band]
+
+// 1 on the ceiling band, for conditional formatting of band visuals.
+Is Ceiling Band =
+IF ( SELECTEDVALUE ( dim_discount_band[discount_band] ) = [Ceiling Band], 1, 0 )
+
+// Does any discount beat full price on margin? (ceiling "vs full price" is the full-price band)
+Best Band vs Full Price =
+VAR m = SELECTEDVALUE ( 'Margin Scenario'[margin], 0.6 )
+VAR measureName = "margin_index_" & FORMAT ( m * 100, "0" )
+VAR base = SELECTEDVALUE ( fact_discount_bands[baseline], "local" )
+RETURN
+    CALCULATE (
+        MAX ( fact_discount_thresholds[ceiling_band] ),
+        fact_discount_thresholds[measure] = measureName,
+        fact_discount_thresholds[reference] = "full price",
+        fact_discount_thresholds[baseline] = base
+    )
+
+
+// -----------------------------------------------------------------------------
+// 4. Customers (fact_customer, dim_customer_segment, fact_cohort_retention) - Segments page
+// -----------------------------------------------------------------------------
+
+// Number of customers.
+Customers =
+COUNTROWS ( fact_customer )
+
+// Share of all customers (ignores the segment filter).
+Customer Share =
+DIVIDE ( [Customers], CALCULATE ( [Customers], REMOVEFILTERS ( dim_customer_segment ) ) )
+
+// All indexed revenue from these customers over the whole period.
+Customer Revenue =
+SUM ( fact_customer[indexed_revenue] )
+
+// Share of all customer revenue.
+Customer Revenue Share =
+DIVIDE ( [Customer Revenue], CALCULATE ( [Customer Revenue], REMOVEFILTERS ( dim_customer_segment ) ) )
+
+// Spend in the 365 days up to each customer's last purchase: the yearly revenue that lapses
+// if they do not come back.
+Revenue at Stake =
+SUM ( fact_customer[revenue_at_stake] )
+
+// Customers with no purchase in the last N days, N from the Churn Window slicer (default 120).
+Churned Customers =
+SWITCH (
+    SELECTEDVALUE ( 'Churn Window'[days], 120 ),
+    90, CALCULATE ( [Customers], fact_customer[churned_90d] = TRUE () ),
+    120, CALCULATE ( [Customers], fact_customer[churned_120d] = TRUE () ),
+    180, CALCULATE ( [Customers], fact_customer[churned_180d] = TRUE () )
+)
+
+// Share of customers counted as churned under the selected window.
+Churn Rate =
+DIVIDE ( [Churned Customers], [Customers] )
+
+// Average days since last purchase at the snapshot date.
+Avg Recency (days) =
+AVERAGE ( fact_customer[recency_days] )
+
+// Average distinct purchase days per customer.
+Avg Purchase Days =
+AVERAGE ( fact_customer[frequency] )
+
+// Win-back offer for a single segment (capped at the Phase 3 markdown ceiling).
+Win-back Offer =
+SELECTEDVALUE ( dim_customer_segment[offer_discount] )
+
+// Share of a cohort buying k months after its first purchase (one row per cell, so the
+// average is the value itself). Use in a matrix: rows = cohort, columns = months_since.
+Cohort Retention =
+AVERAGE ( fact_cohort_retention[retention] )
+
+
+// -----------------------------------------------------------------------------
+// 5. Forecast (fact_forecast, fact_forecast_metrics) - Forecast page
+//    Pick the model with the Forecast Model slicer; filter dim_product_group to one
+//    forecast category (is_forecast_category = TRUE).
+// -----------------------------------------------------------------------------
+
+// Actual weekly units (history and the backtest period).
+Actual Units =
+CALCULATE ( SUM ( fact_forecast[units] ), fact_forecast[kind] = "actual" )
+
+// Forecast weekly units from the selected model (backtest folds + 12-week forward forecast).
+Forecast Units =
+VAR m = SELECTEDVALUE ( 'Forecast Model'[model], "prophet_promo" )
+RETURN
+    CALCULATE ( SUM ( fact_forecast[yhat] ), fact_forecast[kind] <> "actual", fact_forecast[model] = m )
+
+// Lower and upper bounds of the 80% prediction interval (Prophet models only).
+Forecast Lower =
+VAR m = SELECTEDVALUE ( 'Forecast Model'[model], "prophet_promo" )
+RETURN
+    CALCULATE ( SUM ( fact_forecast[yhat_lower] ), fact_forecast[kind] <> "actual", fact_forecast[model] = m )
+
+Forecast Upper =
+VAR m = SELECTEDVALUE ( 'Forecast Model'[model], "prophet_promo" )
+RETURN
+    CALCULATE ( SUM ( fact_forecast[yhat_upper] ), fact_forecast[kind] <> "actual", fact_forecast[model] = m )
+
+// Backtest category for the metrics table: the selected forecast category, else all pooled.
+Backtest Category =
+IF (
+    HASONEVALUE ( dim_product_group[product_group_name] ),
+    VALUES ( dim_product_group[product_group_name] ),
+    "All categories"
+)
+
+// Backtest WAPE (sum |error| / sum actual) over the 12-week horizon for the selected model.
+WAPE (backtest) =
+VAR m = SELECTEDVALUE ( 'Forecast Model'[model], "prophet_promo" )
+VAR cat = [Backtest Category]
+RETURN
+    CALCULATE (
+        MAX ( fact_forecast_metrics[wape] ),
+        fact_forecast_metrics[model] = m,
+        fact_forecast_metrics[bucket] = "1-12",
+        fact_forecast_metrics[category] = cat
+    )
+
+// Backtest MAPE (mean of |error| / actual) over the 12-week horizon for the selected model.
+MAPE (backtest) =
+VAR m = SELECTEDVALUE ( 'Forecast Model'[model], "prophet_promo" )
+VAR cat = [Backtest Category]
+RETURN
+    CALCULATE (
+        MAX ( fact_forecast_metrics[mape] ),
+        fact_forecast_metrics[model] = m,
+        fact_forecast_metrics[bucket] = "1-12",
+        fact_forecast_metrics[category] = cat
+    )
+
+// The same two metrics for the seasonal-naive baseline, to show next to the model.
+// (A measure cannot sit inside a CALCULATE filter, so the category goes in a variable first.)
+WAPE Seasonal Naive =
+VAR cat = [Backtest Category]
+RETURN
+    CALCULATE (
+        MAX ( fact_forecast_metrics[wape] ),
+        fact_forecast_metrics[model] = "seasonal_naive",
+        fact_forecast_metrics[bucket] = "1-12",
+        fact_forecast_metrics[category] = cat
+    )
+
+MAPE Seasonal Naive =
+VAR cat = [Backtest Category]
+RETURN
+    CALCULATE (
+        MAX ( fact_forecast_metrics[mape] ),
+        fact_forecast_metrics[model] = "seasonal_naive",
+        fact_forecast_metrics[bucket] = "1-12",
+        fact_forecast_metrics[category] = cat
+    )
+
+// Does the selected model beat the baseline on WAPE? (for a green/red indicator)
+Beats Baseline =
+IF ( [WAPE (backtest)] < [WAPE Seasonal Naive], "Beats seasonal naive", "Does not beat seasonal naive" )

@@ -16,7 +16,7 @@ help:
 	@echo "analysis   eda + discount + customers + their notebooks"
 	@echo "forecast   backtest + 12-week forecast -> reports/forecast/, notebook 04"
 	@echo "tag        train/evaluate the product tagger, tag Myntra, notebook 05"
-	@echo "export     (Phase 7)"
+	@echo "export     Power BI star schema -> data/processed/powerbi/ (+ dashboard/data_dictionary.md)"
 	@echo "all        everything, in order"
 	@echo "test | lint | format"
 
@@ -60,7 +60,7 @@ tag:
 	$(PY) -m jupyter nbconvert --to notebook --execute --inplace notebooks/05_product_tagging.ipynb
 
 export:
-	@echo "export: not built yet (Phase 7)"; exit 1
+	$(PY) -m fdda.export.powerbi
 
 all: data analysis forecast tag export
 
