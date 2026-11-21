@@ -1,0 +1,39 @@
+# --- Project data & secrets (never commit) ---
+data/
+.env
+.env.*
+!.env.example
+
+# --- Power BI backups / temp files ---
+*.pbix.bak
+*.pbit.bak
+~$*.pbix
+*.pbix.backup
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+build/
+dist/
+*.egg-info/
+.eggs/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# --- Virtual environments ---
+.venv/
+venv/
+env/
+
+# --- Jupyter ---
+.ipynb_checkpoints/
+
+# --- OS / editors ---
+.DS_Store
+.vscode/
+.idea/
