@@ -1,0 +1,78 @@
+field,value,share
+category,Accessories,0.481
+category,Topwear,0.2736
+category,Bottomwear,0.0856
+category,Full-body garment,0.0776
+category,Innerwear,0.0328
+category,Socks & hosiery,0.0138
+category,Footwear,0.0116
+category,Other,0.0102
+category,Nightwear & loungewear,0.0098
+category,Swimwear,0.004
+subcategory,Other,0.4962
+subcategory,T-shirt,0.1318
+subcategory,Trousers,0.055
+subcategory,Other accessories,0.0464
+subcategory,Garment Set,0.0412
+subcategory,Earring,0.0266
+subcategory,Polo shirt,0.0244
+subcategory,Dress,0.0236
+subcategory,Bra,0.0222
+subcategory,Shorts,0.0196
+subcategory,Sunglasses,0.015
+subcategory,Sweater,0.0136
+subcategory,Socks,0.0118
+subcategory,Shirt,0.0082
+subcategory,Jacket,0.0072
+subcategory,Blouse,0.0066
+subcategory,Top,0.0062
+subcategory,Necklace,0.0062
+subcategory,Bag,0.0058
+subcategory,Underwear bottom,0.0052
+subcategory,Vest top,0.0044
+subcategory,Skirt,0.0032
+subcategory,Leggings/Tights,0.003
+subcategory,Boots,0.0016
+subcategory,Hat/beanie,0.0016
+subcategory,Underwear Tights,0.0016
+subcategory,Belt,0.0016
+subcategory,Cap/peaked,0.0016
+subcategory,Pyjama set,0.0016
+subcategory,Cardigan,0.0014
+subcategory,Sandals,0.001
+subcategory,Jumpsuit/Playsuit,0.001
+subcategory,Scarf,0.001
+subcategory,Hair/alice band,0.0008
+subcategory,Swimwear bottom,0.0006
+subcategory,Swimsuit,0.0004
+subcategory,Coat,0.0002
+subcategory,Other shoe,0.0002
+subcategory,Blazer,0.0002
+subcategory,Sneakers,0.0002
+primary_colour,Black,0.4206
+primary_colour,Blue,0.1716
+primary_colour,Pink,0.1698
+primary_colour,White,0.1566
+primary_colour,Metallic,0.0346
+primary_colour,Grey,0.0146
+primary_colour,Beige,0.0118
+primary_colour,Red,0.008
+primary_colour,Orange,0.0072
+primary_colour,Yellow,0.003
+primary_colour,Green,0.0018
+primary_colour,Purple,0.0002
+primary_colour,Brown,0.0002
+pattern,Solid,0.7354
+pattern,Graphic print,0.0958
+pattern,Printed,0.0856
+pattern,Striped,0.0294
+pattern,Embellished,0.019
+pattern,Embroidered,0.0126
+pattern,Melange,0.0064
+pattern,Checked,0.0062
+pattern,Textured,0.003
+pattern,Denim,0.0024
+pattern,Colour block,0.0024
+pattern,Lace,0.001
+pattern,Other,0.0004
+pattern,Polka dot,0.0004

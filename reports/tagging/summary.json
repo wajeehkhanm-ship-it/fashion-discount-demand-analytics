@@ -1,0 +1,80 @@
+{
+  "articles": 105542,
+  "styles": 47224,
+  "split_articles": {
+    "train": 75826,
+    "test": 21112,
+    "val": 8604
+  },
+  "features": 30000,
+  "fields": {
+    "category": {
+      "chosen_model": "logreg",
+      "test_accuracy": 0.9793956043956044,
+      "test_macro_f1": 0.9587076857729852,
+      "test_accuracy_title_only": 0.6279840848806366,
+      "baseline_test_accuracy": 0.400293671845396,
+      "classes": 10
+    },
+    "subcategory": {
+      "chosen_model": "logreg",
+      "test_accuracy": 0.8913887836301629,
+      "test_macro_f1": 0.8764368558415742,
+      "test_accuracy_title_only": 0.4973474801061008,
+      "baseline_test_accuracy": 0.10226411519514968,
+      "classes": 46
+    },
+    "primary_colour": {
+      "chosen_model": "logreg",
+      "test_accuracy": 0.34283819628647216,
+      "test_macro_f1": 0.21182283302524865,
+      "test_accuracy_title_only": 0.2579575596816976,
+      "baseline_test_accuracy": 0.21835922697991664,
+      "classes": 14
+    },
+    "pattern": {
+      "chosen_model": "logreg",
+      "test_accuracy": 0.6415308829101932,
+      "test_macro_f1": 0.443118475084137,
+      "test_accuracy_title_only": 0.5062050018946571,
+      "baseline_test_accuracy": 0.46362258431223946,
+      "classes": 14
+    }
+  },
+  "auto_accept": {
+    "combined": {
+      "threshold": 0.9,
+      "products": 21112,
+      "auto_accept_share": 0.1427624100037893,
+      "all_fields_correct_when_auto_accepted": 0.8968148639681487,
+      "all_fields_correct_overall": 0.5702917771883289
+    },
+    "per_field": {
+      "category": {
+        "threshold": 0.9,
+        "coverage": 0.9387552103069344,
+        "accuracy_above": 0.9933397245067864,
+        "accuracy_below": 0.765661252900232
+      },
+      "subcategory": {
+        "threshold": 0.9,
+        "coverage": 0.69879689276241,
+        "accuracy_above": 0.9676675930319257,
+        "accuracy_below": 0.714420506368926
+      },
+      "primary_colour": {
+        "threshold": 0.9,
+        "coverage": 0.012078438802576733,
+        "accuracy_above": 0.9019607843137255,
+        "accuracy_below": 0.3360023013856259
+      },
+      "pattern": {
+        "threshold": 0.9,
+        "coverage": 0.20372300113679423,
+        "accuracy_above": 0.8981632178563125,
+        "accuracy_below": 0.5758729403366843
+      }
+    }
+  },
+  "seconds": 716.9
+}

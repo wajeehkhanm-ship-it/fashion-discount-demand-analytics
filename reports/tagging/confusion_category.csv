@@ -1,0 +1,11 @@
+true,Topwear,Bottomwear,Full-body garment,Accessories,Innerwear,Footwear,Swimwear,Socks & hosiery,Nightwear & loungewear,Other
+Topwear,8319,2,83,13,18,0,1,0,15,0
+Bottomwear,0,4009,51,11,1,0,2,5,0,0
+Full-body garment,73,28,2560,6,0,0,1,0,3,0
+Accessories,2,0,3,2180,0,0,0,0,0,1
+Innerwear,16,1,8,2,1246,0,3,0,4,0
+Footwear,1,0,0,0,2,964,0,3,0,0
+Swimwear,20,1,1,7,0,0,567,0,0,0
+Socks & hosiery,0,3,0,0,2,2,0,494,0,0
+Nightwear & loungewear,3,11,6,0,1,0,0,0,292,0
+Other,1,1,1,8,8,0,0,0,0,46

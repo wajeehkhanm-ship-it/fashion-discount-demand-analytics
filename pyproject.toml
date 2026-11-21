@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "fdda"
 version = "0.1.0"
-description = "Discount payback, RFM/churn, demand forecasting and LLM product tagging for fashion e-commerce"
+description = "Discount payback, RFM/churn, demand forecasting and ML product tagging for fashion e-commerce"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
@@ -33,6 +33,11 @@ analysis = [
 ]
 forecast = [
     "prophet>=1.1.5",
+]
+tagging = [
+    "scikit-learn>=1.4",
+    "xgboost>=2.0",
+    "joblib>=1.3",
 ]
 
 [tool.setuptools.packages.find]

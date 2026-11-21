@@ -15,14 +15,15 @@ help:
 	@echo "customers  KPIs, RFM, cohorts, win-back playbook -> reports/customers/"
 	@echo "analysis   eda + discount + customers + their notebooks"
 	@echo "forecast   backtest + 12-week forecast -> reports/forecast/, notebook 04"
-	@echo "tag | export   (later phases)"
+	@echo "tag        train/evaluate the product tagger, tag Myntra, notebook 05"
+	@echo "export     (Phase 7)"
 	@echo "all        everything, in order"
 	@echo "test | lint | format"
 
 setup:
 	$(PYTHON) -m venv $(VENV)
 	$(PY) -m pip install --upgrade pip
-	$(PY) -m pip install -e ".[dev,analysis,forecast]"
+	$(PY) -m pip install -e ".[dev,analysis,forecast,tagging]"
 	$(VENV)/bin/pre-commit install
 
 data: download clean-data
@@ -55,7 +56,8 @@ forecast:
 	$(PY) -m jupyter nbconvert --to notebook --execute --inplace notebooks/04_forecasting.ipynb
 
 tag:
-	@echo "tag: not built yet (Phase 6)"; exit 1
+	$(PY) -m fdda.tagging.run all
+	$(PY) -m jupyter nbconvert --to notebook --execute --inplace notebooks/05_product_tagging.ipynb
 
 export:
 	@echo "export: not built yet (Phase 7)"; exit 1

@@ -151,7 +151,104 @@ forecast:
     changepoint_prior_scale: 0.05
     interval_width: 0.80
 
-llm:
-  cache_dir: data/interim/llm_cache
-  eval_sample_size: 1000
+tagging:
+  # Classic ML tagger: TF-IDF text features -> XGBoost (vs logistic regression and a
+  # most-frequent-label baseline), trained on H&M article labels.
+  fields: [category, subcategory, primary_colour, pattern]
+  text_columns: [prod_name, detail_desc]
+  group_column: product_code       # colour variants share text: split by style, not article
+  test_size: 0.20
+  val_size: 0.10                   # share of training styles held out for model selection
+  tfidf: {ngram_range: [1, 2], min_df: 3, max_features: 30000, sublinear_tf: true}
+  logreg: {C: 4.0, max_iter: 2000}
+  xgboost:
+    n_estimators: 400
+    learning_rate: 0.2
+    max_depth: 6
+    subsample: 0.9
+    colsample_bytree: 0.5
+    early_stopping_rounds: 20
+    tree_method: hist
+    max_features_selected: 3000    # chi2-selected TF-IDF features for the tree model
+  confidence_thresholds: [0.5, 0.6, 0.7, 0.8, 0.9, 0.95]
+  auto_accept_threshold: 0.9       # suggestions at or above this confidence are auto-accepted
+  # Fields in the combined auto-accept measure. Colour is left out: product texts rarely
+  # name the colour and colour variants share one description, so it needs image data.
+  auto_accept_fields: [category, subcategory, pattern]
   myntra_sample_size: 5000
+  effort_study:
+    n_items: 100                   # per arm (manual, review), from the H&M test set
+  # Allowed values per field (labels are mapped onto these; see hm_eval below).
+  schema:
+    category: [Topwear, Bottomwear, Full-body garment, Innerwear, Nightwear & loungewear,
+               Swimwear, Footwear, Socks & hosiery, Accessories, Other]
+    subcategory: [Trousers, Dress, Sweater, T-shirt, Top, Blouse, Jacket, Shorts, Shirt, Vest top,
+                  Underwear bottom, Skirt, Hoodie, Bra, Socks, Leggings/Tights, Sneakers, Cardigan,
+                  Hat/beanie, Garment Set, Swimwear bottom, Bag, Earring, Jumpsuit/Playsuit, Pyjama set,
+                  Blazer, Other accessories, Boots, Scarf, Bodysuit, Hair/alice band, Bikini top,
+                  Sandals, Swimsuit, Sunglasses, Necklace, Cap/peaked, Underwear Tights, Coat, Belt,
+                  Polo shirt, Hat/brim, Other shoe, Pyjama jumpsuit/playsuit, Ballerinas, Other]
+    primary_colour: [Black, White, Grey, Beige, Brown, Blue, Green, Red, Pink, Purple, Yellow, Orange,
+                     Metallic, Unknown]
+    pattern: [Solid, Striped, Checked, Printed, Graphic print, Polka dot, Melange, Denim, Lace,
+              Embroidered, Colour block, Textured, Embellished, Other]
+
+  hm_eval:
+    category_from_product_group:
+      Garment Upper body: Topwear
+      Garment Lower body: Bottomwear
+      Garment Full body: Full-body garment
+      Underwear: Innerwear
+      Nightwear: Nightwear & loungewear
+      Swimwear: Swimwear
+      Shoes: Footwear
+      Socks & Tights: Socks & hosiery
+      Accessories: Accessories
+      Bags: Accessories
+    # H&M colour groups -> base colours: first keyword (case-insensitive) that appears wins.
+    colour_rules:
+      - [gold, Metallic]
+      - [silver, Metallic]
+      - [bronze, Metallic]
+      - [black, Black]
+      - [white, White]
+      - [greyish beige, Beige]
+      - [beige, Beige]
+      - [grey, Grey]
+      - [yellowish brown, Brown]
+      - [brown, Brown]
+      - [khaki, Green]
+      - [turquoise, Blue]
+      - [blue, Blue]
+      - [green, Green]
+      - [red, Red]
+      - [pink, Pink]
+      - [purple, Purple]
+      - [yellow, Yellow]
+      - [orange, Orange]
+    pattern_from_appearance:
+      Solid: Solid
+      All over pattern: Printed
+      Melange: Melange
+      Stripe: Striped
+      Denim: Denim
+      Front print: Graphic print
+      Placement print: Graphic print
+      Check: Checked
+      Colour blocking: Colour block
+      Contrast: Colour block
+      Lace: Lace
+      Embroidery: Embroidered
+      Jacquard: Textured
+      Other structure: Textured
+      Chambray: Textured
+      Slub: Textured
+      Mesh: Textured
+      Neps: Textured
+      Argyle: Textured
+      Application/3D: Embellished
+      Glittering/Metallic: Embellished
+      Metallic: Embellished
+      Sequin: Embellished
+      Hologram: Embellished
+      Dot: Polka dot

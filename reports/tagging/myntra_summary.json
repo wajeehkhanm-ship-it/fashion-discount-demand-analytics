@@ -1,0 +1,15 @@
+{
+  "items": 5000,
+  "median_confidence": {
+    "category": 0.6038279962958972,
+    "subcategory": 0.4395227386017767,
+    "primary_colour": 0.3588784637745568,
+    "pattern": 0.6736521026340585
+  },
+  "share_confidence_at_least_0.9": {
+    "category": 0.1626,
+    "subcategory": 0.0716,
+    "primary_colour": 0.004,
+    "pattern": 0.1498
+  }
+}
